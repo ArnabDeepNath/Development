@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "98444596140",
+    "project_id": "mithilamotors-35780",
+    "storage_bucket": "mithilamotors-35780.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98444596140:android:f8450b74ffd18860ec6009",
+        "android_client_info": {
+          "package_name": "com.example.mithila1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98444596140-pohdv8sm78cnaaf1sm2fmfkine09r9uq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mithila1",
+            "certificate_hash": "0d0b30490c7f7f9cc0cc8a71fc368f745859b0f8"
+          }
+        },
+        {
+          "client_id": "98444596140-1mmbkdddkj2vvbhj4bj0d5h9qq9ksq4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDryh4IT0DWPIIdOUh9zPP4ijUwK72fwj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98444596140-1mmbkdddkj2vvbhj4bj0d5h9qq9ksq4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
