@@ -121,8 +121,9 @@ class _itemsDisplayPageState extends State<itemsDisplayPage> {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ListTile(
                                 subtitle: Center(
@@ -148,50 +149,48 @@ class _itemsDisplayPageState extends State<itemsDisplayPage> {
                                 //   ),
                                 // ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Column(
-                                      children: [
-                                        const Icon(
-                                          Icons.edit,
-                                          color: AppColors.primaryColor,
-                                        ),
-                                        Text(
-                                          'Edit Item',
-                                          style: AppFonts.Subtitle2(),
-                                        ),
-                                      ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Column(
+                                        children: [
+                                          const Icon(
+                                            Icons.edit,
+                                            color: AppColors.primaryColor,
+                                          ),
+                                          Text(
+                                            'Edit Item',
+                                            style: AppFonts.Subtitle2(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const VerticalDivider(
-                                    color: Colors.grey,
-                                    thickness: 0.8,
-                                    indent: 5,
-                                    endIndent: 5,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      _deleteItem(
-                                          snapshot.data!.docs[index].id);
-                                    },
-                                    child: Column(
-                                      children: [
-                                        Icon(
-                                          Icons.cancel,
-                                          color: Colors.redAccent,
-                                        ),
-                                        Text(
-                                          'Delete Item',
-                                          style: AppFonts.Subtitle2(),
-                                        ),
-                                      ],
+                                    InkWell(
+                                      onTap: () {
+                                        _deleteItem(
+                                            snapshot.data!.docs[index].id);
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.cancel,
+                                            color: Colors.redAccent,
+                                          ),
+                                          Text(
+                                            'Delete Item',
+                                            style: AppFonts.Subtitle2(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:gspappfinal/components/transactionCard.dart';
+import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
 import 'package:gspappfinal/views/AddSalesPage.dart'; // Replace with the actual path to your Party model
@@ -26,8 +29,16 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
   Widget build(BuildContext context) {
     final String? userId = getCurrentUserUid();
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
-        title: Text('Party Details'),
+        title: Text(
+          'Party Details',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        backgroundColor: AppColors.secondaryColor,
       ),
       body: StreamBuilder<List<Party>>(
         stream: partyController.partiesStream(userId!), // Stream of parties
@@ -64,24 +75,32 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                     children: [
                       Text(
                         'Name: ${party.name}',
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
                       Text(
                         'Contact: ${party.contactNumber}',
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
                       ),
                       Text(
                         'Balance: Rs. ${party.balance.toStringAsFixed(2)}',
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Divider(),
-                Text(
-                  'Transactions:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -115,9 +134,12 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                                 .add_jm()
                                 .format(formattedDate);
 
-                            return ListTile(
-                              title: Text('Rs. $amount'),
-                              subtitle: Text(formattedDateString),
+                            return transactionCard(
+                              amount: amount,
+                              type: 'Payment',
+                              typeColor: Colors.green,
+                              balance: 0.0,
+                              name: 'Arnab',
                             );
                           },
                         );
