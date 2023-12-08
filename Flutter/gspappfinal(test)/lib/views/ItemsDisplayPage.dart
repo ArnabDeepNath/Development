@@ -94,104 +94,111 @@ class _itemsDisplayPageState extends State<itemsDisplayPage> {
                 }
 
                 // Display the list of items
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var item = snapshot.data!.docs[index].data()
-                        as Map<String, dynamic>;
-                    // Customize the item display as needed
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey
-                                    .withOpacity(0.3), // Shadow color
-                                // Shadow color
-                                offset:
-                                    const Offset(0, 2), // Offset of the shadow
-                                blurRadius: 4, // Blur radius of the shadow
-                                spreadRadius: 1, // Spread radius of the shadow
-                              ),
-                            ],
-                          ),
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Adjust the crossAxisCount as needed
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                    ),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var item = snapshot.data!.docs[index].data()
+                          as Map<String, dynamic>;
+                      // Customize the item display as needed
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              offset: const Offset(0, 2),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Column(
                             children: [
                               ListTile(
-                                title: Text(
-                                  item['itemName'],
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.bold,
+                                subtitle: Center(
+                                  child: Text(
+                                    item['itemName'],
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                                leading: CircleAvatar(
-                                  radius: 50,
+                                title: CircleAvatar(
+                                  radius: 40,
                                   backgroundImage: NetworkImage(
                                     item['itemImage'],
                                   ),
                                 ),
-                                subtitle: Text(item['itemDescription']),
-                                // Add other item details as needed
-                                // ...
+                                // trailing: Text(
+                                //   'Unit: ' + item['itemUnit'],
+                                //   style: GoogleFonts.inter(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 14,
+                                //   ),
+                                // ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: IntrinsicHeight(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Column(
-                                          children: [
-                                            Icon(
-                                              Icons.edit,
-                                              color: AppColors.primaryColor,
-                                            ),
-                                            Text(
-                                              'Edit Item',
-                                              style: AppFonts.Subtitle2(),
-                                            ),
-                                          ],
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.edit,
+                                          color: AppColors.primaryColor,
                                         ),
-                                      ),
-                                      const VerticalDivider(
-                                        color: Colors.grey,
-                                        thickness: 0.8,
-                                        indent: 5,
-                                        endIndent: 5,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          _deleteItem(
-                                              snapshot.data!.docs[index].id);
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Icon(
-                                              Icons.cancel,
-                                              color: Colors.redAccent,
-                                            ),
-                                            Text(
-                                              'Delete Item',
-                                              style: AppFonts.Subtitle2(),
-                                            ),
-                                          ],
+                                        Text(
+                                          'Edit Item',
+                                          style: AppFonts.Subtitle2(),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                  const VerticalDivider(
+                                    color: Colors.grey,
+                                    thickness: 0.8,
+                                    indent: 5,
+                                    endIndent: 5,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      _deleteItem(
+                                          snapshot.data!.docs[index].id);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.cancel,
+                                          color: Colors.redAccent,
+                                        ),
+                                        Text(
+                                          'Delete Item',
+                                          style: AppFonts.Subtitle2(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          )),
-                    );
-                  },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),

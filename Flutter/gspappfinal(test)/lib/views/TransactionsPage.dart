@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gspappfinal/constants/AppColor.dart';
 
 class UserTransactions extends StatefulWidget {
   const UserTransactions({super.key});
@@ -11,10 +12,11 @@ class _UserTransactionsState extends State<UserTransactions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: Column(
         children: [
           Center(
-            child: Text('Your Transactions'),
+            child: Text('Fuck that Bitch !!'),
           )
         ],
       ),

@@ -28,7 +28,7 @@ class _AddItemsPageState extends State<AddItemsPage> {
     itemUnitController.clear();
     itemDescController.clear();
     setState(() {
-      selectedImagePath = null;
+      selectedImagePath = '';
     });
   }
 
@@ -155,17 +155,9 @@ class _AddItemsPageState extends State<AddItemsPage> {
                     validator: nonEmptyValidator,
                     obscureText: false,
                   ),
-                  // TextFormFieldCustom(
-                  //   label: 'Item Image',
-                  //   controller: itemNameController,
-                  //   onChange: (value) {},
-                  //   validator: nonEmptyValidator,
-                  //   obscureText: false,
-                  // ),
                   CustomImagePicker(
                     onImageSelected: _handleImageSelected,
                   ),
-
                   TextFormFieldCustom(
                     label: 'Item Description',
                     controller: itemDescController,
