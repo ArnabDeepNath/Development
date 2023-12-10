@@ -2,8 +2,8 @@ class TransactionsMain {
   final double amount;
   final String description; // You can add a description if needed
   final DateTime timestamp;
-  final String sender;
-  final String reciever;
+  final String? sender;
+  final String? reciever;
   final bool isEditable;
   final double balance;
 

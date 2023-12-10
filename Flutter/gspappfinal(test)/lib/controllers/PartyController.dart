@@ -91,4 +91,20 @@ class MainPartyController {
       throw e;
     }
   }
+
+  Future<void> addTransactionToUser(
+      String userId, TransactionsMain transactionMain) async {
+    try {
+      // Reference the user's document
+      final userDocRef = usersCollection.doc(userId);
+
+      // Create a new transaction document within the user's subcollection
+      await userDocRef.collection('transactions').add(transactionMain.toMap());
+
+      // You may want to perform additional actions if needed
+    } catch (e) {
+      print('Error adding transaction to user: $e');
+      throw e;
+    }
+  }
 }
