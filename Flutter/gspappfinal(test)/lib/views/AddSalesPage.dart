@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
@@ -6,10 +7,12 @@ import 'package:gspappfinal/models/TransactionsModel.dart';
 class AddSalePage extends StatefulWidget {
   final String partyId;
   final double currentBalance;
+  final String partyName;
 
   AddSalePage({
     required this.partyId,
     required this.currentBalance,
+    required this.partyName,
   });
 
   @override
@@ -67,8 +70,10 @@ class _AddSalePageState extends State<AddSalePage> {
     String? userId = getCurrentUserUid();
     // Create a new transaction
     final TransactionsMain transaction = TransactionsMain(
-      amount: _saleAmount!, description: '', timestamp: DateTime.now(),
+      amount: _saleAmount!, description: '',
+      timestamp: Timestamp.fromMicrosecondsSinceEpoch(0),
       sender: userId, reciever: widget.partyId, isEditable: false, balance: 0.0,
+      recieverName: widget.partyName,
       // Add any other necessary details for the transaction
     );
 

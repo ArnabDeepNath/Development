@@ -22,10 +22,11 @@ class MainDashboard extends StatefulWidget {
 
 class _MainDashboardState extends State<MainDashboard> {
   int _selectedIndex = 0;
-  String userId = '';
+
   late List<Widget> _pages; // Declare _pages as late
   String userName = ''; // A variable to store the user name
   String userEmail = '';
+  String userIdPage = '';
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
@@ -42,9 +43,11 @@ class _MainDashboardState extends State<MainDashboard> {
         if (userDataMap != null && userDataMap.containsKey('first_name')) {
           final firstName = userDataMap['first_name'] as String;
           final email = userDataMap['email'] as String;
+
           setState(() {
             userName = firstName;
             userEmail = email;
+            userIdPage = user.uid;
           });
         }
       }
@@ -70,51 +73,21 @@ class _MainDashboardState extends State<MainDashboard> {
     }
   }
 
-  // int _currentPage = 0;
-
-  // List<TabItem> tabs = [
-  //   TabItem(
-  //     iconData: Icons.home,
-  //     title: 'Dashboard',
-  //     tabColor: Colors.blue,
-  //     selected: true,
-  //     callbackFunction: (Key? uniqueKey) {},
-  //     iconColor: AppColors.primaryColor,
-  //     textColor: AppColors.secondaryColor,
-  //   ),
-  //   TabItem(
-  //     iconData: Icons.bar_chart,
-  //     title: 'Business',
-  //     tabColor: Colors.orange,
-  //     selected: true,
-  //     callbackFunction: (Key? uniqueKey) {},
-  //     iconColor: AppColors.primaryColor,
-  //     textColor: AppColors.secondaryColor,
-  //   ),
-  //   TabItem(
-  //     iconData: Icons.person,
-  //     title: 'Profile',
-  //     tabColor: Colors.orange,
-  //     selected: true,
-  //     callbackFunction: (Key? uniqueKey) {},
-  //     iconColor: AppColors.primaryColor,
-  //     textColor: AppColors.secondaryColor,
-  //   ),
-  // ];
-
-  // Color _currentColor = AppColors.primaryColor;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    initializePage();
+  }
 
-    _pages = [
-      HomePage(),
-      _buildItemsPage(),
-      UserTransactions(),
-    ];
+  Future<void> initializePage() async {
     fetchFirstName();
+    setState(() {
+      _pages = [
+        HomePage(),
+        _buildItemsPage(),
+        UserTransactionsPage(),
+      ];
+    });
   }
 
   @override

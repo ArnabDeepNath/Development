@@ -1,49 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:gspappfinal/components/transactionCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
-import 'package:gspappfinal/constants/AppTheme.dart';
+import 'package:gspappfinal/controllers/PartyController.dart';
+import 'package:gspappfinal/models/TransactionsModel.dart';
 
-class UserTransactions extends StatefulWidget {
-  const UserTransactions({super.key});
+import 'package:gspappfinal/components/transactionCard.dart';
 
-  @override
-  State<UserTransactions> createState() => _UserTransactionsState();
-}
+class UserTransactionsPage extends StatelessWidget {
+  const UserTransactionsPage({Key? key}) : super(key: key);
 
-class _UserTransactionsState extends State<UserTransactions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Your Transactions',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          transactionCard(
-            type: 'Sale',
-            typeColor: Colors.red,
-            amount: 500.0,
-            balance: 155.0,
-            name: 'Deepak',
-          ),
-          transactionCard(
-            type: 'Pay',
-            typeColor: Colors.green,
-            amount: 8000.0,
-            balance: 5.0,
-            name: 'Deepak',
-          ),
-        ],
+      body: StreamBuilder<List<TransactionsMain>>(
+        stream: MainPartyController()
+            .getUserTransactions(), // Replace with your controller
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text('No transactions found.');
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final transaction = snapshot.data![index];
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: transactionCard(
+                    type: '',
+                    amount: transaction.amount,
+                    balance: transaction.balance,
+                    name: transaction.recieverName,
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }

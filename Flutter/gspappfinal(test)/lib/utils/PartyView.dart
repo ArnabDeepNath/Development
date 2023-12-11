@@ -137,7 +137,6 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                             return transactionCard(
                               amount: amount,
                               type: 'Payment',
-                              typeColor: Colors.green,
                               balance: 0.0,
                               name: 'Arnab',
                             );
@@ -149,9 +148,15 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
                         builder: (context) => AddSalePage(
-                            partyId: party.id, currentBalance: party.balance)));
+                          partyId: party.id,
+                          currentBalance: party.balance,
+                          partyName: party.name,
+                        ),
+                      ),
+                    );
                   },
                   child: Text('Sale'),
                 ),

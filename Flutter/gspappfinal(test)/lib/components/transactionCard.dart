@@ -5,14 +5,12 @@ import 'package:gspappfinal/constants/AppTheme.dart';
 
 class transactionCard extends StatefulWidget {
   final String type;
-  final Color typeColor;
   final double amount;
   final double balance;
-  final String name;
+  final String? name;
   const transactionCard({
     super.key,
     required this.type,
-    required this.typeColor,
     required this.amount,
     required this.balance,
     required this.name,
@@ -48,7 +46,7 @@ class _transactionCardState extends State<transactionCard> {
             children: [
               ListTile(
                 title: Text(
-                  widget.name,
+                  widget.name!,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -62,7 +60,6 @@ class _transactionCardState extends State<transactionCard> {
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
-                    color: widget.typeColor,
                   ),
                 ),
                 trailing: Text(

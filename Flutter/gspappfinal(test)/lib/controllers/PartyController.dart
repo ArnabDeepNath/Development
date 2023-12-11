@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gspappfinal/models/TransactionsModel.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
 
@@ -104,6 +105,48 @@ class MainPartyController {
       // You may want to perform additional actions if needed
     } catch (e) {
       print('Error adding transaction to user: $e');
+      throw e;
+    }
+  }
+
+  Stream<List<TransactionsMain>> getUserTransactions() {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userId = user.uid;
+        final userDocRef = usersCollection.doc(userId);
+
+        // You can place any logic here, for example:
+        print('UserId: $userId');
+
+        return userDocRef
+            .collection('transactions')
+            .snapshots()
+            .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            // Assuming you have a TransactionModel class
+            return TransactionsMain(
+              // Map the fields accordingly based on your model
+              amount: data['amount'],
+              description: data['description'],
+              sender: data['sender'],
+              timestamp: data['timestamp'],
+              reciever: data['receiver'],
+              balance: data['balance'],
+              isEditable: data['isEditable'],
+              recieverName: data['receiverName'],
+              // Add other fields as needed
+            );
+          }).toList();
+        });
+      } else {
+        // Handle the case where the user is not authenticated
+        throw Exception("User not authenticated");
+      }
+    } catch (e) {
+      print('Error getting user transactions: $e');
+      // You might want to handle errors differently (throw, return empty list, etc.)
       throw e;
     }
   }
