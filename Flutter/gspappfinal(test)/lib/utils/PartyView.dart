@@ -136,9 +136,9 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
 
                             return transactionCard(
                               amount: amount,
-                              type: 'Payment',
                               balance: 0.0,
                               name: 'Arnab',
+                              transactionType: '',
                             );
                           },
                         );

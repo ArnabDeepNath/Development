@@ -73,7 +73,8 @@ class _AddSalePageState extends State<AddSalePage> {
       amount: _saleAmount!, description: '',
       timestamp: Timestamp.fromMicrosecondsSinceEpoch(0),
       sender: userId, reciever: widget.partyId, isEditable: false, balance: 0.0,
-      recieverName: widget.partyName,
+      recieverName: widget.partyName, recieverId: widget.partyId,
+      transactionType: '',
       // Add any other necessary details for the transaction
     );
 

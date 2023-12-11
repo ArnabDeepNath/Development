@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import 'package:gspappfinal/components/TextFormField.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
+import 'package:gspappfinal/models/TransactionsModel.dart';
 import 'package:intl/intl.dart';
 
 class AddPartyScreen extends StatefulWidget {
@@ -25,8 +27,9 @@ class _AddPartyScreenState extends State<AddPartyScreen>
   TextEditingController PartyCreationController = TextEditingController();
   TextEditingController PartyBillingAddress = TextEditingController();
   TextEditingController PartyEmailAddress = TextEditingController();
-  late String paymentType;
-  late String BalanceType;
+  TextEditingController PartyState = TextEditingController();
+  late String paymentType = 'cash';
+  late String BalanceType = 'pay';
   final MainPartyController PartyController = MainPartyController();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -63,6 +66,11 @@ class _AddPartyScreenState extends State<AddPartyScreen>
     PartyBalanceController.clear();
     PartyContactController.clear();
     PartyNameController.clear();
+    PartyBillingAddress.clear();
+    PartyEmailAddress.clear();
+    PartyGSTController.clear();
+    PartyState.clear();
+    PartyCreationController.clear();
   }
 
   Future<void> createNewParty() async {
@@ -73,7 +81,7 @@ class _AddPartyScreenState extends State<AddPartyScreen>
         double balance = double.tryParse(PartyBalanceController.text) ?? 0.0;
 
         // If the payment type is 'pay', add a negative sign to the balance
-        if (paymentType == 'pay') {
+        if (BalanceType == 'receive') {
           balance = -balance;
         }
 
@@ -86,14 +94,35 @@ class _AddPartyScreenState extends State<AddPartyScreen>
           BillingAddress: PartyBillingAddress.text,
           EmailAddress: PartyEmailAddress.text,
           paymentType: paymentType,
-          balanceType: 'BalanceType',
+          balanceType: BalanceType,
           creationDate: '',
           transactions: [],
         );
 
         // Pass the user's UID to the addParty function
-        await PartyController.addParty(newParty, userId);
+        String partyId = await PartyController.addParty(newParty, userId);
 
+        // Update the new party with the retrieved partyId
+        print('Party Name: ' + PartyNameController.text);
+        await PartyController.addTransactionToUser(
+          userId,
+          TransactionsMain(
+            amount: balance,
+            description: '',
+            timestamp: Timestamp.fromDate(
+              DateTime.now(),
+            ),
+            reciever: partyId,
+            sender: userId,
+            balance: 0,
+            isEditable: false,
+            recieverName: PartyNameController.text,
+            recieverId: partyId,
+            transactionType: BalanceType,
+          ),
+        );
+
+        clear();
         print('New party added successfully');
       } else {
         print('User is not logged in.');
@@ -255,15 +284,15 @@ class _AddPartyScreenState extends State<AddPartyScreen>
                   if (selected == 'To Pay') {
                     setState(
                       () {
-                        paymentType = 'pay';
+                        BalanceType = 'pay';
                       },
                     );
                   } else if (selected == 'To Recieve') {
                     setState(() {
-                      paymentType = 'receieve';
+                      BalanceType = 'recieve';
                     });
                   }
-                  print(paymentType);
+                  print(BalanceType);
                 },
                 Colors: Colors.red,
               ),
@@ -305,7 +334,7 @@ class _AddPartyScreenState extends State<AddPartyScreen>
                               TextFormFieldCustom(
                                 validator: nonEmptyValidator,
                                 label: 'Billing Address',
-                                controller: PartyGSTController,
+                                controller: PartyBillingAddress,
                                 obscureText: false,
                                 onChange: (text) {
                                   // Set userTyping to true when the user starts typing
@@ -315,7 +344,7 @@ class _AddPartyScreenState extends State<AddPartyScreen>
                                 validator: nonEmptyValidator,
                                 obscureText: false,
                                 label: 'Email Address',
-                                controller: PartyGSTController,
+                                controller: PartyEmailAddress,
                                 onChange: (text) {
                                   // Set userTyping to true when the user starts typing
                                 },
@@ -338,7 +367,7 @@ class _AddPartyScreenState extends State<AddPartyScreen>
                                 validator: nonEmptyValidator,
                                 obscureText: false,
                                 label: 'State',
-                                controller: PartyGSTController,
+                                controller: PartyState,
                                 onChange: (text) {
                                   // Set userTyping to true when the user starts typing
                                 },
@@ -357,7 +386,6 @@ class _AddPartyScreenState extends State<AddPartyScreen>
                   if (_formKey.currentState!.validate()) {
                     // The form is valid, proceed to create a new party.
                     createNewParty();
-                    clear();
                   }
                 },
                 child: Text('Add New Party'),

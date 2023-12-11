@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final party = parties[index];
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.18,
                           decoration: BoxDecoration(
@@ -209,21 +209,21 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Rs. ${party.balance < 0 ? -party.balance : party.balance}',
+                                      'Rs. ${party.balance}',
                                       style: GoogleFonts.inter(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
-                                        color: party.balance < 0
+                                        color: party.balanceType == 'recieve'
                                             ? Colors.red
                                             : Colors.green,
                                       ),
                                     ),
                                     Text(
-                                      party.balance < 0
+                                      party.balanceType == 'recieve'
                                           ? 'You will receive'
                                           : 'You will pay',
                                       style: GoogleFonts.inter(
-                                        color: party.balance < 0
+                                        color: party.balanceType == 'recieve'
                                             ? Colors.red
                                             : Colors.green,
                                       ),
@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );

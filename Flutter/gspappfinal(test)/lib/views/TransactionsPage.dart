@@ -31,10 +31,10 @@ class UserTransactionsPage extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: transactionCard(
-                    type: '',
                     amount: transaction.amount,
                     balance: transaction.balance,
                     name: transaction.recieverName,
+                    transactionType: transaction.transactionType,
                   ),
                 );
               },

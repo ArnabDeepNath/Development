@@ -9,6 +9,8 @@ class TransactionsMain {
   final bool isEditable;
   final double balance;
   final String recieverName;
+  final String recieverId;
+  final String transactionType;
 
   TransactionsMain({
     required this.amount,
@@ -19,6 +21,8 @@ class TransactionsMain {
     required this.balance,
     required this.isEditable,
     required this.recieverName,
+    required this.recieverId,
+    required this.transactionType,
   });
 
   // Create a method to convert the transaction data to a map
@@ -32,6 +36,8 @@ class TransactionsMain {
       'balance': balance,
       'isEditable': isEditable,
       'receiverName': recieverName,
+      'receiverId': recieverId,
+      'transactionType': transactionType,
     };
   }
 
@@ -46,6 +52,8 @@ class TransactionsMain {
       balance: map['balance'],
       isEditable: map['isEditable'],
       recieverName: map['receiverName'],
+      recieverId: map['receiverId'],
+      transactionType: map['transactionType'],
     );
   }
 }

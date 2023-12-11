@@ -34,13 +34,13 @@ class MainPartyController {
     });
   }
 
-  Future<void> addParty(Party party, String userId) async {
+  Future<String> addParty(Party party, String userId) async {
     try {
       // Reference the user's document
       final userDocRef = usersCollection.doc(userId);
 
       // Create a new party document within the user's 'parties' subcollection
-      await userDocRef.collection('parties').add({
+      final docRef = await userDocRef.collection('parties').add({
         'name': party.name,
         'contactNumber': party.contactNumber,
         'balance': party.balance,
@@ -51,6 +51,9 @@ class MainPartyController {
         'balanceType': party.balanceType,
         'creationDate': '',
       });
+
+      // Return the partyId
+      return docRef.id;
     } catch (e) {
       print('Error adding party: $e');
       throw e;
@@ -136,6 +139,8 @@ class MainPartyController {
               balance: data['balance'],
               isEditable: data['isEditable'],
               recieverName: data['receiverName'],
+              recieverId: data['receiverId'],
+              transactionType: data['transactionType'],
               // Add other fields as needed
             );
           }).toList();
