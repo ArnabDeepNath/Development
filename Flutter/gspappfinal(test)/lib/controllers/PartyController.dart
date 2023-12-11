@@ -28,7 +28,7 @@ class MainPartyController {
           GSTID: data['gstID'] ?? '',
           paymentType: data['paymentType'] ?? '',
           balanceType: data['balanceType'] ?? '',
-          creationDate: '',
+          creationDate: data['creationDate'],
         );
       }).toList();
     });

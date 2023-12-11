@@ -62,7 +62,9 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                 GSTID: '',
                 paymentType: '',
                 balanceType: '',
-                creationDate: DateTime.now() as String,
+                creationDate: Timestamp.fromDate(
+                  DateTime.now(),
+                ),
               ),
             );
 

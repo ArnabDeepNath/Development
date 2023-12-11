@@ -95,7 +95,9 @@ class _AddPartyScreenState extends State<AddPartyScreen>
           EmailAddress: PartyEmailAddress.text,
           paymentType: paymentType,
           balanceType: BalanceType,
-          creationDate: '',
+          creationDate: Timestamp.fromDate(
+            DateTime.now(),
+          ),
           transactions: [],
         );
 

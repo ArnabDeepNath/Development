@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gspappfinal/models/TransactionsModel.dart';
 
 class Party {
   final String id;
   final String name;
   final String contactNumber;
-  final String creationDate;
+  final Timestamp creationDate;
   final String GSTID;
   final String BillingAddress;
   final String EmailAddress;
