@@ -141,6 +141,9 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                               balance: 0.0,
                               name: 'Arnab',
                               transactionType: '',
+                              transactionId: '',
+                              partyId: '',
+                              userId: '',
                             );
                           },
                         );

@@ -35,6 +35,9 @@ class UserTransactionsPage extends StatelessWidget {
                     balance: transaction.balance,
                     name: transaction.recieverName,
                     transactionType: transaction.transactionType,
+                    partyId: transaction.recieverId,
+                    userId: transaction.sender!,
+                    transactionId: transaction.transactionId,
                   ),
                 );
               },

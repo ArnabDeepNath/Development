@@ -70,13 +70,19 @@ class _AddSalePageState extends State<AddSalePage> {
     String? userId = getCurrentUserUid();
     // Create a new transaction
     final TransactionsMain transaction = TransactionsMain(
-      amount: _saleAmount!, description: '',
-      timestamp: Timestamp.fromMicrosecondsSinceEpoch(0),
-      sender: userId, reciever: widget.partyId, isEditable: false, balance: 0.0,
-      recieverName: widget.partyName, recieverId: widget.partyId,
-      transactionType: '',
-      // Add any other necessary details for the transaction
-    );
+        amount: _saleAmount!,
+        description: '',
+        timestamp: Timestamp.fromMicrosecondsSinceEpoch(0),
+        sender: userId,
+        reciever: widget.partyId,
+        isEditable: false,
+        balance: 0.0,
+        recieverName: widget.partyName,
+        recieverId: widget.partyId,
+        transactionType: '',
+        transactionId: ''
+        // Add any other necessary details for the transaction
+        );
 
     // Call the controller to add the transaction
     // partyController.addTransactionToParty(widget.partyId, transaction, userId!);

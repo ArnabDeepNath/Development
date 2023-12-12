@@ -11,6 +11,7 @@ class TransactionsMain {
   final String recieverName;
   final String recieverId;
   final String transactionType;
+  final String transactionId;
 
   TransactionsMain({
     required this.amount,
@@ -23,6 +24,7 @@ class TransactionsMain {
     required this.recieverName,
     required this.recieverId,
     required this.transactionType,
+    required this.transactionId,
   });
 
   // Create a method to convert the transaction data to a map
@@ -38,6 +40,7 @@ class TransactionsMain {
       'receiverName': recieverName,
       'receiverId': recieverId,
       'transactionType': transactionType,
+      'transactionId': transactionId,
     };
   }
 
@@ -54,6 +57,7 @@ class TransactionsMain {
       recieverName: map['receiverName'],
       recieverId: map['receiverId'],
       transactionType: map['transactionType'],
+      transactionId: map['transactionId'],
     );
   }
 }

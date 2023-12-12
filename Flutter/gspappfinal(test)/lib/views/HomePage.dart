@@ -7,6 +7,7 @@ import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
 import 'package:gspappfinal/utils/PartyView.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:gspappfinal/utils/calcFuncs.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -16,15 +17,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CalcUtil _calcUtil = CalcUtil();
   final MainPartyController partyController = MainPartyController();
+
   String? getCurrentUserUid() {
     final User? user = FirebaseAuth.instance.currentUser;
     return user?.uid;
   }
 
   @override
+  void dispose() {
+    _calcUtil.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final String? userId = getCurrentUserUid();
+    _calcUtil.calculateTotalPayAmount(userId!);
+    _calcUtil.calculateTotalReceivedAmount(userId);
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
       body: Column(
@@ -46,16 +57,12 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.3), // Shadow color
-                          // Shadow color
-                          offset: const Offset(0, 2), // Offset of the shadow
-                          blurRadius: 4, // Blur radius of the shadow
-                          spreadRadius: 1, // Spread radius of the shadow
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: const Offset(0, 2),
+                          blurRadius: 4,
+                          spreadRadius: 1,
                         ),
                       ],
-                      // border: Border.all(
-                      //   color: AppColors().,
-                      // ),
                     ),
                     child: Center(
                       child: Column(
@@ -66,9 +73,23 @@ class _HomePageState extends State<HomePage> {
                             'Total Expense',
                             style: AppFonts.SubtitleColor(),
                           ),
-                          Text(
-                            'Rs. 5000',
-                            style: AppFonts.Subtitle2(),
+                          StreamBuilder<Map<String, dynamic>>(
+                            stream: _calcUtil.totalReceivedAmountStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                double totalReceivedAmount =
+                                    snapshot.data?['totalAmount'] ?? 0.0;
+                                return Text(
+                                  'Rs. $totalReceivedAmount',
+                                  style: AppFonts.Subtitle2(),
+                                );
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -85,10 +106,10 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.3), // Shadow color
-                          offset: const Offset(0, 2), // Offset of the shadow
-                          blurRadius: 4, // Blur radius of the shadow
-                          spreadRadius: 1, // Spread radius of the shadow
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: const Offset(0, 2),
+                          blurRadius: 4,
+                          spreadRadius: 1,
                         ),
                       ],
                     ),
@@ -101,9 +122,23 @@ class _HomePageState extends State<HomePage> {
                             'Total Income',
                             style: AppFonts.SubtitleColor(),
                           ),
-                          Text(
-                            'Rs. 15000',
-                            style: AppFonts.Subtitle2(),
+                          StreamBuilder<Map<String, dynamic>>(
+                            stream: _calcUtil.totalPayAmountStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                double totalReceivedAmount =
+                                    snapshot.data?['totalAmount'] ?? 0.0;
+                                return Text(
+                                  'Rs. $totalReceivedAmount',
+                                  style: AppFonts.Subtitle2(),
+                                );
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -156,14 +191,16 @@ class _HomePageState extends State<HomePage> {
               stream: partyController.partiesStream(userId!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.data!.isEmpty) {
                   return const Text('No parties found.');
                 } else {
                   final parties = snapshot.data!;
-
+                  print('Parties: $parties');
                   return ListView.builder(
                     itemCount: parties.length,
                     itemBuilder: (context, index) {
@@ -269,7 +306,40 @@ class _HomePageState extends State<HomePage> {
                                         endIndent: 5,
                                       ),
                                       InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text('Confirm Deletion'),
+                                                content: Text(
+                                                    'Are you sure you want to delete this party?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close the dialog
+                                                    },
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      // Call the delete party function here
+                                                      await partyController
+                                                          .deleteParty(
+                                                              userId, party.id);
+
+                                                      // Close the dialog
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('Delete'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
                                         child: Column(
                                           children: [
                                             Icon(

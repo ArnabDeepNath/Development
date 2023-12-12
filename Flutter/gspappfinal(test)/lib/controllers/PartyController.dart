@@ -12,11 +12,12 @@ class MainPartyController {
   // Updated to return a stream of parties
   Stream<List<Party>> partiesStream(String userId) {
     // Reference the user's document
+    print('This is the function user Id: ' + userId);
     final userDocRef = usersCollection.doc(userId);
 
     return userDocRef.collection('parties').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+        final data = doc.data();
         return Party(
           id: doc.id,
           name: data['name'] ?? '',
@@ -49,7 +50,7 @@ class MainPartyController {
         'gstId': party.GSTID,
         'paymentType': party.paymentType,
         'balanceType': party.balanceType,
-        'creationDate': '',
+        'creationDate': party.creationDate,
       });
 
       // Return the partyId
@@ -130,19 +131,21 @@ class MainPartyController {
             final data = doc.data() as Map<String, dynamic>;
             // Assuming you have a TransactionModel class
             return TransactionsMain(
-              // Map the fields accordingly based on your model
-              amount: data['amount'],
-              description: data['description'],
-              sender: data['sender'],
-              timestamp: data['timestamp'],
-              reciever: data['receiver'],
-              balance: data['balance'],
-              isEditable: data['isEditable'],
-              recieverName: data['receiverName'],
-              recieverId: data['receiverId'],
-              transactionType: data['transactionType'],
-              // Add other fields as needed
-            );
+                // Map the fields accordingly based on your model
+                amount: data['amount'],
+                description: data['description'],
+                sender: data['sender'],
+                timestamp: data['timestamp'],
+                reciever: data['receiver'],
+                balance: data['balance'],
+                isEditable: data['isEditable'],
+                recieverName: data['receiverName'],
+                recieverId: data['receiverId'],
+                transactionType: data['transactionType'],
+                transactionId: data['transactionId']
+
+                // Add other fields as needed
+                );
           }).toList();
         });
       } else {
@@ -152,6 +155,35 @@ class MainPartyController {
     } catch (e) {
       print('Error getting user transactions: $e');
       // You might want to handle errors differently (throw, return empty list, etc.)
+      throw e;
+    }
+  }
+
+  Future<void> deleteParty(String userId, String partyId) async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      final partyDocRef = userDocRef.collection('parties').doc(partyId);
+      await partyDocRef.delete();
+    } catch (e) {
+      print('Error deleting party: $e');
+      throw e;
+    }
+  }
+
+  Future<void> deleteTransaction(
+      String userId, String partyId, String transactionId) async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      final transactionDocRef = userDocRef
+          .collection('parties')
+          .doc(partyId)
+          .collection('transactions')
+          .doc(transactionId);
+      await transactionDocRef.delete();
+    } catch (e) {
+      print('Error deleting transaction: $e');
       throw e;
     }
   }

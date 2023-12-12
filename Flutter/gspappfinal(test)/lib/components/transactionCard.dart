@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
+import 'package:gspappfinal/controllers/PartyController.dart';
 
 class transactionCard extends StatefulWidget {
   final double amount;
   final double balance;
   final String? name;
   final String transactionType;
+  final String userId;
+  final String partyId;
+  final String transactionId;
+
   const transactionCard({
     super.key,
     required this.amount,
     required this.balance,
     required this.name,
     required this.transactionType,
+    required this.partyId,
+    required this.transactionId,
+    required this.userId,
   });
 
   @override
@@ -87,7 +95,10 @@ class _transactionCardState extends State<transactionCard> {
                     endIndent: 5,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      MainPartyController().deleteTransaction(
+                          widget.userId, widget.partyId, widget.transactionId);
+                    },
                     child: Row(
                       children: [
                         Icon(
