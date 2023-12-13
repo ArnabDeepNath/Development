@@ -182,6 +182,7 @@ class MainPartyController {
   Future<void> deleteTransaction(
       String userId, String partyId, String transactionId) async {
     try {
+      print(transactionId);
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
       final transactionDocRef = userDocRef
@@ -192,6 +193,19 @@ class MainPartyController {
       await transactionDocRef.delete();
     } catch (e) {
       print('Error deleting transaction: $e');
+      throw e;
+    }
+  }
+
+  Future<void> deleteTransactionFromUser(
+      String userId, String transactionId) async {
+    try {
+      final userDocRef = usersCollection.doc(userId);
+
+      // Delete the transaction from the user's transactions collection
+      await userDocRef.collection('transactions').doc(transactionId).delete();
+    } catch (e) {
+      print('Error deleting transaction from user: $e');
       throw e;
     }
   }

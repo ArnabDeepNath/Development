@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/TransactionsModel.dart';
@@ -22,7 +23,14 @@ class UserTransactionsPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('No transactions found.');
+            return Center(
+              child: Text(
+                'No transactions found.',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                ),
+              ),
+            );
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,

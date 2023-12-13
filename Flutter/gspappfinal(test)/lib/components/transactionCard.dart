@@ -96,8 +96,10 @@ class _transactionCardState extends State<transactionCard> {
                   ),
                   InkWell(
                     onTap: () {
-                      MainPartyController().deleteTransaction(
-                          widget.userId, widget.partyId, widget.transactionId);
+                      MainPartyController().deleteTransactionFromUser(
+                        widget.userId,
+                        widget.transactionId,
+                      );
                     },
                     child: Row(
                       children: [
