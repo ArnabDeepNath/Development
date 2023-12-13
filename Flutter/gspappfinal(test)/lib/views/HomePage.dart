@@ -312,14 +312,20 @@ class _HomePageState extends State<HomePage> {
                                         endIndent: 5,
                                       ),
                                       InkWell(
-                                        onTap: () {
+                                        onTap: () async {
+                                          // Retrieve party transactions
+                                          List<String> partyTransactions =
+                                              await partyController
+                                                  .getPartyTransactions(
+                                                      userId, party.id);
+
                                           showDialog(
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: Text('Confirm Deletion'),
                                                 content: Text(
-                                                    'Are you sure you want to delete this party?'),
+                                                    'Are you sure you want to delete this party and its transactions?'),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
@@ -330,10 +336,19 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () async {
-                                                      // Call the delete party function here
+                                                      // Call the delete party function
                                                       await partyController
                                                           .deleteParty(
                                                               userId, party.id);
+
+                                                      // Delete transactions associated with the party
+                                                      for (String transactionId
+                                                          in partyTransactions) {
+                                                        await partyController
+                                                            .deleteTransactionFromUser(
+                                                                userId,
+                                                                transactionId);
+                                                      }
 
                                                       // Close the dialog
                                                       Navigator.of(context)

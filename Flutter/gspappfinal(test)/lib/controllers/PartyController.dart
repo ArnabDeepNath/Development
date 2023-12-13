@@ -209,4 +209,41 @@ class MainPartyController {
       throw e;
     }
   }
+
+  Future<List<String>> getPartyTransactions(
+      String userId, String partyId) async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+
+      // Get the party document
+      final partyDocSnapshot =
+          await userDocRef.collection('parties').doc(partyId).get();
+
+      // Check if the party document exists
+      if (partyDocSnapshot.exists) {
+        // Extract transaction IDs from the party document
+        final partyData = partyDocSnapshot.data() as Map<String, dynamic>;
+        final List<String> partyTransactions =
+            List<String>.from(partyData['transactions'] ?? []);
+
+        // Get the user's transactions
+        final userTransactionsQuery = await userDocRef
+            .collection('transactions')
+            .where('receiverId', isEqualTo: partyId)
+            .get();
+        final List<String> userTransactions =
+            userTransactionsQuery.docs.map((doc) => doc.id).toList();
+
+        // Combine and return the transaction IDs from both party and user transactions
+        return [...partyTransactions, ...userTransactions];
+      } else {
+        // Party document does not exist
+        return [];
+      }
+    } catch (e) {
+      print('Error getting party transactions: $e');
+      throw e;
+    }
+  }
 }
