@@ -144,6 +144,7 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                               transactionId: '',
                               partyId: '',
                               userId: '',
+                              isEditable: false,
                             );
                           },
                         );

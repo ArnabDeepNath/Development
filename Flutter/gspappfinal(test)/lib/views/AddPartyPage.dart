@@ -105,25 +105,42 @@ class _AddPartyScreenState extends State<AddPartyScreen>
         String partyId = await PartyController.addParty(newParty, userId);
 
         // Update the new party with the retrieved partyId
-        print('Party Name: ' + PartyNameController.text);
-        await PartyController.addTransactionToUser(
-          userId,
-          TransactionsMain(
-              amount: balance,
-              description: '',
-              timestamp: Timestamp.fromDate(
-                DateTime.now(),
-              ),
-              reciever: partyId,
-              sender: userId,
-              balance: 0,
-              isEditable: false,
-              recieverName: PartyNameController.text,
-              recieverId: partyId,
-              transactionType: BalanceType,
-              transactionId: ''),
-        );
 
+        // await PartyController.addTransactionToUser(
+        //   userId,
+        //   TransactionsMain(
+        //       amount: balance,
+        //       description: '',
+        //       timestamp: Timestamp.fromDate(
+        //         DateTime.now(),
+        //       ),
+        //       reciever: partyId,
+        //       sender: userId,
+        //       balance: 0,
+        //       isEditable: false,
+        //       recieverName: PartyNameController.text,
+        //       recieverId: partyId,
+        //       transactionType: BalanceType,
+        //       transactionId: ''),
+        // );
+
+        await PartyController.addTransactionToParty(
+            partyId,
+            TransactionsMain(
+                amount: balance,
+                description: '',
+                timestamp: Timestamp.fromDate(
+                  DateTime.now(),
+                ),
+                reciever: partyId,
+                sender: userId,
+                balance: 0,
+                isEditable: true,
+                recieverName: PartyNameController.text,
+                recieverId: partyId,
+                transactionType: BalanceType,
+                transactionId: ''),
+            userId);
         clear();
         print('New party added successfully');
       } else {

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                             style: AppFonts.SubtitleColor(),
                           ),
                           StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalPayAmountStream,
+                            stream: _calcUtil.totalReceivedAmountStream,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                             style: AppFonts.SubtitleColor(),
                           ),
                           StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalReceivedAmountStream,
+                            stream: _calcUtil.totalPayAmountStream,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -263,8 +263,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       party.balanceType == 'recieve'
-                                          ? 'You will receive'
-                                          : 'You will pay',
+                                          ? 'You will pay'
+                                          : 'You will receive',
                                       style: GoogleFonts.inter(
                                         color: party.balanceType == 'recieve'
                                             ? Colors.red
@@ -337,19 +337,44 @@ class _HomePageState extends State<HomePage> {
                                                   TextButton(
                                                     onPressed: () async {
                                                       // Call the delete party function
-                                                      await partyController
-                                                          .deleteParty(
-                                                              userId, party.id);
 
                                                       // Delete transactions associated with the party
                                                       for (String transactionId
                                                           in partyTransactions) {
-                                                        await partyController
-                                                            .deleteTransactionFromUser(
-                                                                userId,
-                                                                transactionId);
+                                                        try {
+                                                          // Delete from user's transactions
+                                                          // await partyController
+                                                          //     .deleteTransactionFromUser(
+                                                          //         userId,
+                                                          //         transactionId);
+                                                          // print(
+                                                          //     'Deleted from user transactions: $transactionId');
+
+                                                          // Delete from party's transactions
+                                                          await partyController
+                                                              .deleteTransaction(
+                                                                  userId,
+                                                                  party.id,
+                                                                  transactionId);
+                                                          print(
+                                                              'Deleted from party transactions: $transactionId');
+                                                        } catch (e) {
+                                                          print(
+                                                              'Error deleting transaction: $e');
+                                                        }
                                                       }
 
+// After all transactions are deleted, delete the party
+                                                      try {
+                                                        await partyController
+                                                            .deleteParty(userId,
+                                                                party.id);
+                                                        print(
+                                                            'Deleted party: ${party.id}');
+                                                      } catch (e) {
+                                                        print(
+                                                            'Error deleting party: $e');
+                                                      }
                                                       // Close the dialog
                                                       Navigator.of(context)
                                                           .pop();

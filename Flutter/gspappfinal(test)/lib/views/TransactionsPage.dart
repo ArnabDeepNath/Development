@@ -46,6 +46,7 @@ class UserTransactionsPage extends StatelessWidget {
                     partyId: transaction.recieverId,
                     userId: transaction.sender!,
                     transactionId: transaction.transactionId,
+                    isEditable: transaction.isEditable,
                   ),
                 );
               },

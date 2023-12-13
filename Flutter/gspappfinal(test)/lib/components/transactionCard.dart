@@ -12,6 +12,7 @@ class transactionCard extends StatefulWidget {
   final String userId;
   final String partyId;
   final String transactionId;
+  final bool isEditable;
 
   const transactionCard({
     super.key,
@@ -22,6 +23,7 @@ class transactionCard extends StatefulWidget {
     required this.partyId,
     required this.transactionId,
     required this.userId,
+    required this.isEditable,
   });
 
   @override
@@ -69,7 +71,7 @@ class _transactionCardState extends State<transactionCard> {
                 ),
               ),
             ),
-            if (widget.transactionType == 'pay')
+            if (widget.isEditable == true)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -96,6 +98,8 @@ class _transactionCardState extends State<transactionCard> {
                   ),
                   InkWell(
                     onTap: () {
+                      MainPartyController().deleteTransaction(
+                          widget.userId, widget.partyId, widget.transactionId);
                       MainPartyController().deleteTransactionFromUser(
                         widget.userId,
                         widget.transactionId,

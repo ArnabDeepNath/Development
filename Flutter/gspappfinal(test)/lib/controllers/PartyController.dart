@@ -12,7 +12,7 @@ class MainPartyController {
   // Updated to return a stream of parties
   Stream<List<Party>> partiesStream(String userId) {
     // Reference the user's document
-    print('This is the function user Id: ' + userId);
+
     final userDocRef = usersCollection.doc(userId);
 
     return userDocRef.collection('parties').snapshots().map((snapshot) {
@@ -72,9 +72,19 @@ class MainPartyController {
           .collection('parties')
           .doc(partyId)
           .collection('transactions')
-          .add(transactionMain.toMap());
+          .add(
+            transactionMain.toMap(),
+          );
 
       // You may also want to update the balance of the party if needed
+      final DocumentReference transactionDocRef = await userDocRef
+          .collection('transactions')
+          .add(transactionMain.toMap());
+
+      final String transactionId = transactionDocRef.id;
+
+      // Update the transaction document with its ID
+      await transactionDocRef.update({'transactionId': transactionId});
     } catch (e) {
       print('Error adding transaction: $e');
       throw e;
@@ -182,7 +192,6 @@ class MainPartyController {
   Future<void> deleteTransaction(
       String userId, String partyId, String transactionId) async {
     try {
-      print(transactionId);
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
       final transactionDocRef = userDocRef

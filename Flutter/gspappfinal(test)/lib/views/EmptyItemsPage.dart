@@ -44,7 +44,7 @@ class _emptyItemsPageState extends State<emptyItemsPage> {
               width: MediaQuery.of(context).size.width * 0.6,
               child: Center(
                 child: Text(
-                  'Add Party',
+                  'Add Items',
                   style: GoogleFonts.inter(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
