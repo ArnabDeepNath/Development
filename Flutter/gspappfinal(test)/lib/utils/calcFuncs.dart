@@ -18,64 +18,67 @@ class CalcUtil {
     _totalPayAmountController.close();
   }
 
-  Future<void> calculateTotalReceivedAmount(String userId) async {
+  void calculateTotalPayAmount(String userId) {
     try {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
       final transactionsCollection = userDocRef.collection('transactions');
 
-      final receivedTransactionsQuery = await transactionsCollection
+      transactionsCollection
           .where('sender', isEqualTo: userId)
-          .where('transactionType', isEqualTo: 'recieve')
-          .get();
+          .where('transactionType', isEqualTo: 'pay')
+          .snapshots()
+          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+        final receivedTransactions = snapshot.docs
+            .map((doc) => TransactionsMain.fromMap(doc.data()))
+            .toList();
 
-      final receivedTransactions = receivedTransactionsQuery.docs
-          .map((doc) => TransactionsMain.fromMap(doc.data()))
-          .toList();
+        double totalAmount = 0.0;
+        int transactionCount = receivedTransactions.length;
 
-      double totalAmount = 0.0;
-      int transactionCount = receivedTransactions.length;
+        for (var transaction in receivedTransactions) {
+          totalAmount += transaction.amount ?? 0.0;
+        }
 
-      for (var transaction in receivedTransactions) {
-        totalAmount += transaction.amount ?? 0.0;
-      }
-
-      _totalReceivedAmountController.add({
-        'totalAmount': totalAmount,
-        'transactionCount': transactionCount,
+        // Add data to the stream
+        _totalPayAmountController.add({
+          'totalAmount': totalAmount,
+          'transactionCount': transactionCount,
+        });
       });
     } catch (e) {
-      print('Error calculating total received amount: $e');
+      print('Error calculating total pay amount: $e');
       throw e;
     }
   }
 
-  Future<void> calculateTotalPayAmount(String userId) async {
+  void calculateTotalRecievedAmount(String userId) {
     try {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
       final transactionsCollection = userDocRef.collection('transactions');
 
-      final receivedTransactionsQuery = await transactionsCollection
+      transactionsCollection
           .where('sender', isEqualTo: userId)
-          .where('transactionType', isEqualTo: 'pay')
-          .get();
+          .where('transactionType', isEqualTo: 'recieve')
+          .snapshots()
+          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+        final receivedTransactions = snapshot.docs
+            .map((doc) => TransactionsMain.fromMap(doc.data()))
+            .toList();
 
-      final receivedTransactions = receivedTransactionsQuery.docs
-          .map((doc) => TransactionsMain.fromMap(doc.data()))
-          .toList();
+        double totalAmount = 0.0;
+        int transactionCount = receivedTransactions.length;
 
-      double totalAmount = 0.0;
-      int transactionCount = receivedTransactions.length;
+        for (var transaction in receivedTransactions) {
+          totalAmount += transaction.amount ?? 0.0;
+        }
 
-      for (var transaction in receivedTransactions) {
-        totalAmount += transaction.amount ?? 0.0;
-      }
-
-      // Add data to the stream
-      _totalPayAmountController.add({
-        'totalAmount': totalAmount,
-        'transactionCount': transactionCount,
+        // Add data to the stream
+        _totalReceivedAmountController.add({
+          'totalAmount': totalAmount,
+          'transactionCount': transactionCount,
+        });
       });
     } catch (e) {
       print('Error calculating total pay amount: $e');

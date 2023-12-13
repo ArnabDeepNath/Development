@@ -104,7 +104,15 @@ class MainPartyController {
       final userDocRef = usersCollection.doc(userId);
 
       // Create a new transaction document within the user's subcollection
-      await userDocRef.collection('transactions').add(transactionMain.toMap());
+      final DocumentReference transactionDocRef = await userDocRef
+          .collection('transactions')
+          .add(transactionMain.toMap());
+
+      // Retrieve the ID of the newly added document
+      final String transactionId = transactionDocRef.id;
+
+      // Update the transaction document with its ID
+      await transactionDocRef.update({'transactionId': transactionId});
 
       // You may want to perform additional actions if needed
     } catch (e) {

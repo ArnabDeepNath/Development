@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final String? userId = getCurrentUserUid();
     _calcUtil.calculateTotalPayAmount(userId!);
-    _calcUtil.calculateTotalReceivedAmount(userId);
+    _calcUtil.calculateTotalRecievedAmount(userId);
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
       body: Column(
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                             style: AppFonts.SubtitleColor(),
                           ),
                           StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalReceivedAmountStream,
+                            stream: _calcUtil.totalPayAmountStream,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                             style: AppFonts.SubtitleColor(),
                           ),
                           StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalPayAmountStream,
+                            stream: _calcUtil.totalReceivedAmountStream,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -197,10 +197,16 @@ class _HomePageState extends State<HomePage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.data!.isEmpty) {
-                  return const Text('No parties found.');
+                  return Center(
+                    child: Text(
+                      'No parties found.',
+                      style: GoogleFonts.inter(
+                        fontSize: 22,
+                      ),
+                    ),
+                  );
                 } else {
                   final parties = snapshot.data!;
-                  print('Parties: $parties');
                   return ListView.builder(
                     itemCount: parties.length,
                     itemBuilder: (context, index) {
