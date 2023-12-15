@@ -313,19 +313,13 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: () async {
-                                          // Retrieve party transactions
-                                          List<String> partyTransactions =
-                                              await partyController
-                                                  .getPartyTransactions(
-                                                      userId, party.id);
-
                                           showDialog(
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: Text('Confirm Deletion'),
                                                 content: Text(
-                                                    'Are you sure you want to delete this party and its transactions?'),
+                                                    'Are you sure you want to delete this party?'),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
@@ -336,45 +330,33 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () async {
-                                                      // Call the delete party function
+                                                      // Get the party transactions
+                                                      List<String>
+                                                          partyTransactions =
+                                                          await partyController
+                                                              .getPartyTransactions(
+                                                                  userId,
+                                                                  party.id);
 
-                                                      // Delete transactions associated with the party
+                                                      // Delete each party transaction from both user's and party's collections
                                                       for (String transactionId
                                                           in partyTransactions) {
-                                                        try {
-                                                          // Delete from user's transactions
-                                                          // await partyController
-                                                          //     .deleteTransactionFromUser(
-                                                          //         userId,
-                                                          //         transactionId);
-                                                          // print(
-                                                          //     'Deleted from user transactions: $transactionId');
-
-                                                          // Delete from party's transactions
-                                                          await partyController
-                                                              .deleteTransaction(
-                                                                  userId,
-                                                                  party.id,
-                                                                  transactionId);
-                                                          print(
-                                                              'Deleted from party transactions: $transactionId');
-                                                        } catch (e) {
-                                                          print(
-                                                              'Error deleting transaction: $e');
-                                                        }
-                                                      }
-
-// After all transactions are deleted, delete the party
-                                                      try {
                                                         await partyController
-                                                            .deleteParty(userId,
-                                                                party.id);
-                                                        print(
-                                                            'Deleted party: ${party.id}');
-                                                      } catch (e) {
-                                                        print(
-                                                            'Error deleting party: $e');
+                                                            .deleteTransactionFromUser(
+                                                                userId,
+                                                                transactionId);
+                                                        await partyController
+                                                            .deleteTransaction(
+                                                                userId,
+                                                                party.id,
+                                                                transactionId);
                                                       }
+
+                                                      // Finally, delete the party
+                                                      await partyController
+                                                          .deleteParty(
+                                                              userId, party.id);
+
                                                       // Close the dialog
                                                       Navigator.of(context)
                                                           .pop();

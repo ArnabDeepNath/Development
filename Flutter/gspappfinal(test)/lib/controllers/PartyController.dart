@@ -61,30 +61,30 @@ class MainPartyController {
     }
   }
 
-  Future<void> addTransactionToParty(
+Future<void> addTransactionToParty(
       String partyId, TransactionsMain transactionMain, String userId) async {
     try {
       // Reference the user's document
       final userDocRef = usersCollection.doc(userId);
 
       // Create a new transaction document within the user's party's subcollection
-      await userDocRef
+      final DocumentReference partyTransactionDocRef = await userDocRef
           .collection('parties')
           .doc(partyId)
           .collection('transactions')
-          .add(
-            transactionMain.toMap(),
-          );
-
-      // You may also want to update the balance of the party if needed
-      final DocumentReference transactionDocRef = await userDocRef
-          .collection('transactions')
           .add(transactionMain.toMap());
 
-      final String transactionId = transactionDocRef.id;
+      // Capture the transaction ID
+      final String transactionId = partyTransactionDocRef.id;
 
       // Update the transaction document with its ID
-      await transactionDocRef.update({'transactionId': transactionId});
+      await partyTransactionDocRef.update({'transactionId': transactionId});
+
+      // Also, add the transaction to the user's general transactions subcollection
+      await userDocRef.collection('transactions').add({
+        ...transactionMain.toMap(),
+        'transactionId': transactionId,
+      });
     } catch (e) {
       print('Error adding transaction: $e');
       throw e;
@@ -200,6 +200,7 @@ class MainPartyController {
           .collection('transactions')
           .doc(transactionId);
       await transactionDocRef.delete();
+      print('Transaction ID: - ' + transactionId);
     } catch (e) {
       print('Error deleting transaction: $e');
       throw e;
