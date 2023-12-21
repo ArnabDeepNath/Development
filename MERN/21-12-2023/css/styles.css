@@ -36,15 +36,14 @@ body {
 }
 
 .card .HeroSection p {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 700;
-  padding: 22px;
 }
 
 .hero-img img {
   /* background-color: blue; */
   height: 20rem;
-  margin: -14% 10%;
+  margin: -5% 35%;
   padding: 60px 60px;
   z-index: -1;
 }
