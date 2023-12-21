@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@300;400;500&family=Ubuntu:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@300;400;500&family=Ubuntu:wght@300;400;500;700&display=swap');
 
 body {
   scroll-behavior: smooth;
@@ -18,40 +18,26 @@ body {
 }
 
 .card .HeroSection {
-  background: linear-gradient(0deg, magenta, cyan, yellow, violet);
+  background: linear-gradient(45deg, magenta, cyan, lightgreen, yellow);
   background-clip: text;
   color: transparent;
+  background-size: 400% 400%;
+  animation: powerAnimation 8s ease-in-out infinite;
 }
 
 .card .HeroSection p {
   font-size: 2rem;
   font-weight: 700;
   padding: 22px;
-  animation: powerAnimation 0.5s infinite alternate;
 }
 
 @keyframes powerAnimation {
   0%,
-  45% {
-    background: linear-gradient(20deg, magenta, cyan, yellow, violet);
-    background-clip: text;
-    color: transparent;
-    transition: ease-in-out 1s;
-  }
-
-  50%,
-  70% {
-    background: linear-gradient(40deg, magenta, cyan, yellow, violet);
-    background-clip: text;
-    color: transparent;
-    transition: ease-in-out 1s;
-  }
-
-  80%,
   100% {
-    background: linear-gradient(90deg, magenta, cyan, yellow, violet);
-    background-clip: text;
-    color: transparent;
-    transition: ease-in-out 1s;
+    background-position: 0%;
+  }
+
+  50% {
+    background-position: 100%;
   }
 }
