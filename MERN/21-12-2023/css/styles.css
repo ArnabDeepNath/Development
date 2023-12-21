@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@300;400;500&family=Ubuntu:wght@300;400;500;700&display=swap');
+
+body {
+  scroll-behavior: smooth;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  font-family: 'Inter', sans-serif;
+}
+
+.card {
+  background-color: white;
+  height: 50hv;
+  border-radius: 5px;
+  box-shadow: 0px 0px 80px 5px cyan;
+}
+
+.card .HeroSection {
+  background: linear-gradient(to right, magenta, cyan, yellow, violet);
+  background-clip: text;
+  color: transparent;
+}
+
+.card .HeroSection p {
+  font-size: 2rem;
+  font-weight: 700;
+  padding: 22px;
+  animation: powerAnimation 1s infinite alternate;
+}
+
+@keyframes powerAnimation {
+  0% {
+    transform: translate(10px, 20px);
+  }
+
+  50% {
+    transform: translate(10px, 20px);
+  }
+
+  100% {
+    transform: translate(10px, 20px);
+  }
+}
