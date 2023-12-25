@@ -38,7 +38,6 @@ body {
 
 .card .row a:hover {
   color: magenta;
-  animation: ease-in-out 2s linear;
 }
 
 .card .row p {
@@ -50,7 +49,7 @@ body {
 .card .mini-card {
   background-color: Purple;
   color: white;
-  font-weight: 800;
+  font-weight: 600;
   width: 80px;
   height: 50px;
   display: flex;
@@ -60,3 +59,16 @@ body {
   padding: 1px;
   box-shadow: 5px 5px 10px 1px grey;
 }
+
+.card .mini-card a {
+  color: white;
+}
+.card .mini-card a:hover {
+  transform: translate(0px, -5px);
+  color: orange;
+}
+
+/* We need to find 
+1. How do I connect CSS Components ?
+2. How do I use Arguments (Maybe JS will come there !!)
+3. Can we use two component for one animation ? */
