@@ -8,6 +8,25 @@ body {
   background-color: #111111;
   color: white;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+.gradient-effect {
+  background: linear-gradient(
+    to top right,
+    transparent,
+    transparent,
+    transparent,
+    rgba(255, 255, 255, 0.25)
+  );
+  height: 100vh;
+  width: 100%;
+  animation: animation01 2s infinite alternate;
+  backdrop-filter: blur(50px);
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
 }
 
 nav {
@@ -17,6 +36,8 @@ nav {
   justify-content: space-evenly;
   padding: 1rem;
   background-color: transparent;
+  position: relative;
+  z-index: 2;
 }
 
 nav img {
@@ -30,6 +51,103 @@ nav .nav-comp {
   align-items: end;
 }
 
-nav .nav-comp p {
+nav .nav-comp a {
   padding-left: 2rem;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+.container {
+  position: relative;
+}
+
+.container nav .nav-comp a:hover {
+  color: #c21925;
+}
+
+.container .Hero-Img {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.container .Hero-Img .Hero-Text {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.container .Hero-Img .Hero-Text a {
+  text-decoration: none;
+  color: #c21925;
+  font-weight: 900;
+  font-size: 54px;
+}
+
+.container .Hero-Img .Hero-Text p {
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+  padding: 0;
+}
+
+.container .Hero-Img .Hero-Text h1 {
+  font-size: 16px;
+  font-weight: 400;
+  padding-right: 8rem;
+}
+.container .Hero-Img img {
+  height: 45vh;
+  padding: 0rem 6rem;
+}
+
+.container .Second-Section {
+  position: relative;
+  z-index: 3;
+  padding: 0rem 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.container .Second-Section .card-big:hover {
+  background-color: #c21925;
+  color: white;
+}
+
+.container .Second-Section .card-big {
+  width: 180px;
+  padding: 2rem 4rem;
+  background-color: 181818;
+  box-shadow: 0px 0px 80px 0.5px black;
+}
+
+.container .Second-Section .card-big a {
+  text-decoration: none;
+  color: white;
+  font-size: 22px;
+  font-weight: 800;
+}
+.container .Second-Section .card-big p {
+  color: grey;
+  font-size: 18px;
+  font-weight: 400;
+}
+@keyframes animation01 {
+  0% {
+    opacity: 0;
+    background-position: 0% 100%;
+  }
+
+  100% {
+    opacity: 1;
+    background-position: 0% -300%;
+  }
 }
