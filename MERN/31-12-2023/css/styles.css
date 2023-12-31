@@ -121,17 +121,6 @@ nav .nav-comp a {
   object-fit: cover;
 }
 
-.container .Hero-Img img::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  box-shadow: 0px 0px 80px 10px white; /* Adjust glow effect as needed */
-  z-index: 0; /* Place the glow behind the image */
-  background-color: #c21925;
-}
 .container .Second-Section {
   position: relative;
   z-index: 3;
@@ -139,32 +128,91 @@ nav .nav-comp a {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: start;
+}
+
+.container .Second-Section .card-bg {
+  position: absolute;
+  left: 0px;
+  top: 20px;
+  width: 50%;
+  height: 45rem;
+  margin-top: 0rem;
+  z-index: -3;
+  background-color: #181818;
+}
+
+.container .Second-Section .card-bg a {
+  position: absolute;
+  z-index: -2;
+  text-decoration: none;
+  color: #c21925;
+  font-weight: 900;
+  font-size: 66px;
+  top: 500px;
+  left: 450px;
+}
+
+.container .Second-Section .card-bg p {
+  position: absolute;
+  top: 560px;
+  left: 450px;
+  font-weight: 600;
 }
 
 .container .Second-Section .card-big:hover {
   background-color: #c21925;
   color: white;
+  transform: translate(0px, -50px);
 }
 
 .container .Second-Section .card-big {
-  width: 180px;
-  padding: 2rem 4rem;
-  background-color: 181818;
+  width: 250px;
+  padding: 2rem 2rem;
+  background-color: #1e1e1e;
   box-shadow: 0px 0px 80px 0.5px black;
 }
 
-.container .Second-Section .card-big a {
+.container .Second-Section .card-big .col-1 a {
   text-decoration: none;
   color: white;
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 800;
 }
-.container .Second-Section .card-big p {
+.container .Second-Section .card-big .col-1 p {
   color: grey;
   font-size: 18px;
   font-weight: 400;
 }
+.container .Second-Section .card-big .col-1 h2 {
+  color: #c21925;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.container.bg-second {
+  position: relative;
+  z-index: 3;
+}
+.container .bg-second .card-02 {
+  width: 50vh;
+  height: 44px;
+  background-color: white;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 100, 'wght' 800, 'GRAD' 0, 'opsz' 54;
+}
+.container .Second-Section .card-big .material-symbols-outlined {
+  color: #c21925;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.card-big:hover {
+  color: white;
+}
+
 @keyframes animation01 {
   0% {
     opacity: 0;
