@@ -74,6 +74,7 @@ nav .nav-comp a {
   justify-content: center;
   align-items: center;
   opacity: 0.8;
+  margin-left: 5rem;
 }
 
 .container .Hero-Img .Hero-Text {
@@ -85,15 +86,15 @@ nav .nav-comp a {
 
 .container .Hero-Img .Hero-Text a {
   text-decoration: none;
-  color: #c21925;
+  color: rgb(255, 255, 255);
   font-weight: 900;
   font-size: 54px;
 }
 
 .container .Hero-Img .Hero-Text p {
-  color: white;
+  color: red;
   font-weight: 800;
-  font-size: 20px;
+  font-size: 32px;
   padding: 0;
 }
 
@@ -102,6 +103,16 @@ nav .nav-comp a {
   font-weight: 400;
   padding-right: 8rem;
 }
+
+.container .Hero-Img .Hero-Text button {
+  width: 180px;
+  height: 44px;
+  color: white;
+  background: linear-gradient(to right, #c21925, red);
+  margin: 3rem 0rem;
+  font-weight: 600;
+}
+
 .container .Hero-Img img {
   height: 45vh;
   padding: 0rem 6rem;
