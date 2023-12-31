@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@300;400;500&family=Ubuntu:wght@300;400;500;700&display=swap');
+
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #111111;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 1rem;
+  background-color: transparent;
+}
+
+nav img {
+  height: 10vh;
+}
+
+nav .nav-comp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: end;
+}
+
+nav .nav-comp p {
+  padding-left: 2rem;
+}
