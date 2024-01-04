@@ -164,6 +164,7 @@ nav .nav-comp a {
   background-color: #c21925;
   color: white;
   transform: translate(0px, -50px);
+  transition: all 0.5s linear;
 }
 
 .container .Second-Section .card-big {
