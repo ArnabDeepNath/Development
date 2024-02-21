@@ -1,11 +1,19 @@
 import React from 'react';
 import Nav from './components/Nav';
+import Hero from './sections/Hero';
+import Footer from './sections/Footer';
+import PopularProducts from './sections/PopularProducts';
+
 const App = () => {
   return (
     <main className="relative">
       <Nav />
       {/* Hero Section */}
-      <section className="w-full bg-black h-96">a</section>
+      <Hero />
+      {/* Popular Products Section */}
+      <PopularProducts />
+      {/* Footer */}
+      <Footer />
     </main>
   );
 };
