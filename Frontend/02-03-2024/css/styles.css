@@ -1,0 +1,20 @@
+* {
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+.Hero {
+  padding: 2rem;
+  font-size: 52px;
+  font-weight: bold;
+}
+
+.Line {
+  width: 800px;
+  height: 30px;
+  background-color: black;
+  transform: rotate(45deg);
+  pointer-events: none;
+}

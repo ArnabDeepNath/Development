@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mouse Following Function</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #container {
+        width: 100vh;
+        height: 100vh;
+        margin: 0 auto;
+      }
+
+      #eye {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 250px;
+        width: 100vh;
+        background: white;
+        /* border-radius: 50%; */
+        overflow: hidden;
+        box-shadow: 0 0 30px 1px #222236ad;
+      }
+
+      #eyeBall {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 70px;
+        width: 70px;
+        transform: translate(-50%, -50%);
+        background: black;
+        transition: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mouse Following Function</h1>
+    <div id="container">
+      <div id="eye">
+        <div id="eyeBall"></div>
+      </div>
+    </div>
+
+    <script src="js/index.js"></script>
+  </body>
+</html>
