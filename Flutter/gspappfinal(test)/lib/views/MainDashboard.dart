@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:gspappfinal/components/drawerComponent.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
-import 'package:gspappfinal/views/AddItemsPage.dart';
 import 'package:gspappfinal/auth/LoginPage.dart';
-import 'package:gspappfinal/views/AddPartyPage.dart';
-import 'package:gspappfinal/views/EmptyItemsPage.dart';
+import 'package:gspappfinal/views/party_functions/add_party_page.dart';
+import 'package:gspappfinal/views/items_functions/EmptyItemsPage.dart';
 import 'package:gspappfinal/views/HomePage.dart';
-import 'package:gspappfinal/views/ItemsDisplayPage.dart';
-import 'package:gspappfinal/views/TransactionsPage.dart';
+import 'package:gspappfinal/views/items_functions/ItemsDisplayPage.dart';
+import 'package:gspappfinal/views/report_functions/report_fucntion_1.dart';
+import 'package:gspappfinal/views/transaction_functions/TransactionsPage.dart';
 
 class MainDashboard extends StatefulWidget {
   final String userID;
-  MainDashboard({super.key, required this.userID});
+  const MainDashboard({super.key, required this.userID});
 
   @override
   State<MainDashboard> createState() => _MainDashboardState();
@@ -53,7 +53,7 @@ class _MainDashboardState extends State<MainDashboard> {
       }
     } catch (e) {
       // Handle any errors here
-      print('Error fetching first name: $e');
+      // print('Error fetching first name: $e');
     }
   }
 
@@ -69,7 +69,7 @@ class _MainDashboardState extends State<MainDashboard> {
         ),
       );
     } catch (e) {
-      print('Error signing out: $e');
+      // print('Error signing out: $e');
     }
   }
 
@@ -98,7 +98,7 @@ class _MainDashboardState extends State<MainDashboard> {
         child: SafeArea(
           child: Column(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 45,
                 backgroundImage: NetworkImage(
                     'https://pbs.twimg.com/profile_images/1543295063920238592/vvjaWA5W_400x400.jpg'),
@@ -107,7 +107,7 @@ class _MainDashboardState extends State<MainDashboard> {
                 '$userEmail',
                 style: AppFonts.Subtitle2(),
               ),
-              Divider(
+              const Divider(
                 thickness: 0.8,
                 endIndent: 20,
                 indent: 10,
@@ -125,7 +125,14 @@ class _MainDashboardState extends State<MainDashboard> {
               drawerComponent(
                 name: 'Reports',
                 icon: Icons.note,
-                onChanged: () {},
+                onChanged: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReportFunction(),
+                    ),
+                  );
+                },
               ),
               drawerComponent(
                 name: 'Items',
@@ -168,7 +175,7 @@ class _MainDashboardState extends State<MainDashboard> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              child: Text(
+              child: const Text(
                 'Add Party',
               ),
               onPressed: () {
@@ -180,13 +187,6 @@ class _MainDashboardState extends State<MainDashboard> {
               },
             ),
           ),
-          // IconButton(
-          //     onPressed: () {
-          //       signOut();
-          //     },
-          //     icon: Icon(
-          //       Icons.logout,
-          //     ))
         ],
       ),
       body: Column(

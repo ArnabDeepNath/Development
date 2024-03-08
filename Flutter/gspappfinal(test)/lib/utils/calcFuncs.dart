@@ -22,28 +22,37 @@ class CalcUtil {
     try {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
-      final transactionsCollection = userDocRef.collection('transactions');
+      final partiesCollection = userDocRef.collection('parties');
 
-      transactionsCollection
-          .where('sender', isEqualTo: userId)
-          .where('transactionType', isEqualTo: 'pay')
-          .snapshots()
-          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-        final receivedTransactions = snapshot.docs
-            .map((doc) => TransactionsMain.fromMap(doc.data()))
-            .toList();
+      partiesCollection.snapshots().listen((partySnapshot) async {
+        double totalPayAmount = 0.0;
+        int totalTransactionCount = 0;
 
-        double totalAmount = 0.0;
-        int transactionCount = receivedTransactions.length;
+        for (var partyDoc in partySnapshot.docs) {
+          var partyId = partyDoc.id;
+          var transactionsCollection =
+              partiesCollection.doc(partyId).collection('transactions');
 
-        for (var transaction in receivedTransactions) {
-          totalAmount += transaction.amount ?? 0.0;
+          var partyTransactions = await transactionsCollection
+              .where('sender', isEqualTo: userId)
+              .where('transactionType', isEqualTo: 'pay')
+              .get();
+
+          var receivedTransactions = partyTransactions.docs
+              .map((doc) => TransactionsMain.fromMap(doc.data()))
+              .toList();
+
+          totalTransactionCount += receivedTransactions.length;
+
+          for (var transaction in receivedTransactions) {
+            totalPayAmount += transaction.amount;
+          }
         }
 
-        // Add data to the stream
+        // Assuming _totalPayAmountController is a StreamController<Map<String, dynamic>>
         _totalPayAmountController.add({
-          'totalAmount': totalAmount,
-          'transactionCount': transactionCount,
+          'totalPayAmount': totalPayAmount,
+          'transactionCount': totalTransactionCount,
         });
       });
     } catch (e) {
@@ -56,32 +65,41 @@ class CalcUtil {
     try {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
-      final transactionsCollection = userDocRef.collection('transactions');
+      final partiesCollection = userDocRef.collection('parties');
 
-      transactionsCollection
-          .where('sender', isEqualTo: userId)
-          .where('transactionType', isEqualTo: 'recieve')
-          .snapshots()
-          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-        final receivedTransactions = snapshot.docs
-            .map((doc) => TransactionsMain.fromMap(doc.data()))
-            .toList();
-
+      partiesCollection.snapshots().listen((partySnapshot) async {
         double totalAmount = 0.0;
-        int transactionCount = receivedTransactions.length;
+        int totalTransactionCount = 0;
 
-        for (var transaction in receivedTransactions) {
-          totalAmount += transaction.amount ?? 0.0;
+        for (var partyDoc in partySnapshot.docs) {
+          var partyId = partyDoc.id;
+          var transactionsCollection =
+              partiesCollection.doc(partyId).collection('transactions');
+
+          var partyTransactions = await transactionsCollection
+              .where('sender', isEqualTo: userId)
+              .where('transactionType', isEqualTo: 'recieve')
+              .get();
+
+          var receivedTransactions = partyTransactions.docs
+              .map((doc) => TransactionsMain.fromMap(doc.data()))
+              .toList();
+
+          totalTransactionCount += receivedTransactions.length;
+
+          for (var transaction in receivedTransactions) {
+            totalAmount += transaction.amount;
+          }
         }
 
-        // Add data to the stream
+        // Assuming _totalReceivedAmountController is a StreamController<Map<String, dynamic>>
         _totalReceivedAmountController.add({
           'totalAmount': totalAmount,
-          'transactionCount': transactionCount,
+          'transactionCount': totalTransactionCount,
         });
       });
     } catch (e) {
-      print('Error calculating total pay amount: $e');
+      print('Error calculating total received amount: $e');
       throw e;
     }
   }

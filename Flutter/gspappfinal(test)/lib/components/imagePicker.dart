@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 

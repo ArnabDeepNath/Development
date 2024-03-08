@@ -30,6 +30,8 @@ class MainPartyController {
           paymentType: data['paymentType'] ?? '',
           balanceType: data['balanceType'] ?? '',
           creationDate: data['creationDate'],
+          GSTType: data['GSTType'] ?? '',
+          POS: data['POS'] ?? '',
         );
       }).toList();
     });
@@ -51,6 +53,8 @@ class MainPartyController {
         'paymentType': party.paymentType,
         'balanceType': party.balanceType,
         'creationDate': party.creationDate,
+        'GSTType': party.GSTType,
+        'POS': party.POS,
       });
 
       // Return the partyId
@@ -61,7 +65,7 @@ class MainPartyController {
     }
   }
 
-Future<void> addTransactionToParty(
+  Future<void> addTransactionToParty(
       String partyId, TransactionsMain transactionMain, String userId) async {
     try {
       // Reference the user's document
@@ -81,10 +85,11 @@ Future<void> addTransactionToParty(
       await partyTransactionDocRef.update({'transactionId': transactionId});
 
       // Also, add the transaction to the user's general transactions subcollection
-      await userDocRef.collection('transactions').add({
-        ...transactionMain.toMap(),
-        'transactionId': transactionId,
-      });
+      // This part was causing the error | 28-01-2024
+      // await userDocRef.collection('transactions').add({
+      //   ...transactionMain.toMap(),
+      //   'transactionId': transactionId,
+      // });
     } catch (e) {
       print('Error adding transaction: $e');
       throw e;
@@ -139,17 +144,27 @@ Future<void> addTransactionToParty(
         final userDocRef = usersCollection.doc(userId);
 
         // You can place any logic here, for example:
-        print('UserId: $userId');
+        // print('UserId: $userId');
 
         return userDocRef
-            .collection('transactions')
+            .collection('parties') // Adjust the collection name accordingly
             .snapshots()
-            .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            // Assuming you have a TransactionModel class
-            return TransactionsMain(
-                // Map the fields accordingly based on your model
+            .asyncMap((partySnapshot) async {
+          List<TransactionsMain> allTransactions = [];
+
+          for (var partyDoc in partySnapshot.docs) {
+            var partyId = partyDoc.id;
+
+            var partyTransactions = await userDocRef
+                .collection('parties')
+                .doc(partyId)
+                .collection('transactions')
+                .where('sender', isEqualTo: userId)
+                .get();
+
+            allTransactions.addAll(partyTransactions.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return TransactionsMain(
                 amount: data['amount'],
                 description: data['description'],
                 sender: data['sender'],
@@ -160,11 +175,13 @@ Future<void> addTransactionToParty(
                 recieverName: data['receiverName'],
                 recieverId: data['receiverId'],
                 transactionType: data['transactionType'],
-                transactionId: data['transactionId']
+                transactionId: data['transactionId'],
+                senderName: data['senderName'],
+              );
+            }));
+          }
 
-                // Add other fields as needed
-                );
-          }).toList();
+          return allTransactions;
         });
       } else {
         // Handle the case where the user is not authenticated
@@ -182,6 +199,17 @@ Future<void> addTransactionToParty(
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
       final partyDocRef = userDocRef.collection('parties').doc(partyId);
+
+      // Get the list of transaction IDs for the party
+      final partySnapshot = await partyDocRef.collection('transactions').get();
+      final transactionIds = partySnapshot.docs.map((doc) => doc.id).toList();
+
+      // Delete each transaction
+      for (String transactionId in transactionIds) {
+        await deleteTransaction(userId, partyId, transactionId);
+      }
+
+      // Finally, delete the party
       await partyDocRef.delete();
     } catch (e) {
       print('Error deleting party: $e');
@@ -203,56 +231,6 @@ Future<void> addTransactionToParty(
       print('Transaction ID: - ' + transactionId);
     } catch (e) {
       print('Error deleting transaction: $e');
-      throw e;
-    }
-  }
-
-  Future<void> deleteTransactionFromUser(
-      String userId, String transactionId) async {
-    try {
-      final userDocRef = usersCollection.doc(userId);
-
-      // Delete the transaction from the user's transactions collection
-      await userDocRef.collection('transactions').doc(transactionId).delete();
-    } catch (e) {
-      print('Error deleting transaction from user: $e');
-      throw e;
-    }
-  }
-
-  Future<List<String>> getPartyTransactions(
-      String userId, String partyId) async {
-    try {
-      final userDocRef =
-          FirebaseFirestore.instance.collection('users').doc(userId);
-
-      // Get the party document
-      final partyDocSnapshot =
-          await userDocRef.collection('parties').doc(partyId).get();
-
-      // Check if the party document exists
-      if (partyDocSnapshot.exists) {
-        // Extract transaction IDs from the party document
-        final partyData = partyDocSnapshot.data() as Map<String, dynamic>;
-        final List<String> partyTransactions =
-            List<String>.from(partyData['transactions'] ?? []);
-
-        // Get the user's transactions
-        final userTransactionsQuery = await userDocRef
-            .collection('transactions')
-            .where('receiverId', isEqualTo: partyId)
-            .get();
-        final List<String> userTransactions =
-            userTransactionsQuery.docs.map((doc) => doc.id).toList();
-
-        // Combine and return the transaction IDs from both party and user transactions
-        return [...partyTransactions, ...userTransactions];
-      } else {
-        // Party document does not exist
-        return [];
-      }
-    } catch (e) {
-      print('Error getting party transactions: $e');
       throw e;
     }
   }

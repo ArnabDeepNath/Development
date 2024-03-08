@@ -13,6 +13,8 @@ class Party {
   final String balanceType;
   var balance;
   List<TransactionsMain> transactions;
+  final String GSTType;
+  final String POS;
 
   Party({
     required this.id,
@@ -26,6 +28,8 @@ class Party {
     required this.GSTID,
     required this.balanceType,
     required this.paymentType,
+    required this.GSTType,
+    required this.POS,
   });
 }
 

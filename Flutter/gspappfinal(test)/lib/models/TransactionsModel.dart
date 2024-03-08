@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TransactionsMain {
   final double amount;
-  final String description; // You can add a description if needed
+  final String description;
   final Timestamp timestamp;
   final String? sender;
   final String? reciever;
@@ -12,6 +12,7 @@ class TransactionsMain {
   final String recieverId;
   final String transactionType;
   final String transactionId;
+  final String? senderName;
 
   TransactionsMain({
     required this.amount,
@@ -25,6 +26,7 @@ class TransactionsMain {
     required this.recieverId,
     required this.transactionType,
     required this.transactionId,
+    required this.senderName,
   });
 
   // Create a method to convert the transaction data to a map
@@ -41,6 +43,7 @@ class TransactionsMain {
       'receiverId': recieverId,
       'transactionType': transactionType,
       'transactionId': transactionId,
+      'senderName': senderName,
     };
   }
 
@@ -58,6 +61,7 @@ class TransactionsMain {
       recieverId: map['receiverId'],
       transactionType: map['transactionType'],
       transactionId: map['transactionId'],
+      senderName: map['senderName'],
     );
   }
 }

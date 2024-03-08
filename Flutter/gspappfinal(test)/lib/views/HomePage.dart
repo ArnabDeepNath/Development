@@ -5,7 +5,7 @@ import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
-import 'package:gspappfinal/utils/PartyView.dart';
+import 'package:gspappfinal/views/party_functions/PartyView.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:gspappfinal/utils/calcFuncs.dart';
 
@@ -26,9 +26,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void dispose() {
-    _calcUtil.dispose();
-    super.dispose();
+  void initState() {
+    // TODO: implement
+    _calcUtil.totalPayAmountStream;
+    _calcUtil.totalReceivedAmountStream;
+    super.initState();
   }
 
   @override
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                                 return Text('Error: ${snapshot.error}');
                               } else {
                                 double totalReceivedAmount =
-                                    snapshot.data?['totalAmount'] ?? 0.0;
+                                    snapshot.data?['totalAmount'];
                                 return Text(
                                   'Rs. $totalReceivedAmount',
                                   style: AppFonts.Subtitle2(),
@@ -132,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                                 return Text('Error: ${snapshot.error}');
                               } else {
                                 double totalReceivedAmount =
-                                    snapshot.data?['totalAmount'] ?? 0.0;
+                                    snapshot.data?['totalPayAmount'] ?? 0.0;
                                 return Text(
                                   'Rs. $totalReceivedAmount',
                                   style: AppFonts.Subtitle2(),
@@ -188,7 +190,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: StreamBuilder<List<Party>>(
-              stream: partyController.partiesStream(userId!),
+              stream: partyController.partiesStream(userId),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -277,7 +279,10 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => PartyDetailsPage(
+                                        userName: userId,
                                         partyId: party.id,
+                                        partyName: party.name,
+                                        PgstId: party.GSTID,
                                       ),
                                     ),
                                   );
@@ -330,28 +335,6 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () async {
-                                                      // Get the party transactions
-                                                      List<String>
-                                                          partyTransactions =
-                                                          await partyController
-                                                              .getPartyTransactions(
-                                                                  userId,
-                                                                  party.id);
-
-                                                      // Delete each party transaction from both user's and party's collections
-                                                      for (String transactionId
-                                                          in partyTransactions) {
-                                                        await partyController
-                                                            .deleteTransactionFromUser(
-                                                                userId,
-                                                                transactionId);
-                                                        await partyController
-                                                            .deleteTransaction(
-                                                                userId,
-                                                                party.id,
-                                                                transactionId);
-                                                      }
-
                                                       // Finally, delete the party
                                                       await partyController
                                                           .deleteParty(

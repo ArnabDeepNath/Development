@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 
@@ -35,7 +34,7 @@ class _transactionCardState extends State<transactionCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 120,
+        height: 80,
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -67,7 +66,8 @@ class _transactionCardState extends State<transactionCard> {
                 'Rs. ${widget.amount >= 0 ? widget.amount : widget.amount.abs()}',
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                  fontSize: 14,
+                  color: Colors.green.shade600,
                 ),
               ),
             ),
@@ -100,10 +100,10 @@ class _transactionCardState extends State<transactionCard> {
                     onTap: () {
                       MainPartyController().deleteTransaction(
                           widget.userId, widget.partyId, widget.transactionId);
-                      MainPartyController().deleteTransactionFromUser(
-                        widget.userId,
-                        widget.transactionId,
-                      );
+                      // MainPartyController().deleteTransactionFromUser(
+                      //   widget.userId,
+                      //   widget.transactionId,
+                      // );
                     },
                     child: Row(
                       children: [
