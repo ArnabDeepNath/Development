@@ -48,7 +48,7 @@ class CalcUtil {
             totalPayAmount += transaction.amount;
           }
         }
-
+        print('Total Pay Amount: $totalPayAmount');
         // Assuming _totalPayAmountController is a StreamController<Map<String, dynamic>>
         _totalPayAmountController.add({
           'totalPayAmount': totalPayAmount,
@@ -91,6 +91,8 @@ class CalcUtil {
             totalAmount += transaction.amount;
           }
         }
+
+        print('Total Recived Amount: $totalAmount');
 
         // Assuming _totalReceivedAmountController is a StreamController<Map<String, dynamic>>
         _totalReceivedAmountController.add({

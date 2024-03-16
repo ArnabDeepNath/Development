@@ -5,6 +5,7 @@ import 'package:gspappfinal/components/drawerComponent.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
 import 'package:gspappfinal/auth/LoginPage.dart';
+import 'package:gspappfinal/views/AltHomePage.dart';
 import 'package:gspappfinal/views/party_functions/add_party_page.dart';
 import 'package:gspappfinal/views/items_functions/EmptyItemsPage.dart';
 import 'package:gspappfinal/views/HomePage.dart';

@@ -8,6 +8,8 @@ import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
 import 'package:gspappfinal/models/TransactionsModel.dart';
+
+import 'package:gspappfinal/utils/calcFuncs.dart';
 import 'package:intl/intl.dart';
 
 class AddPartyScreen extends StatefulWidget {
@@ -106,6 +108,8 @@ class _AddPartyScreenState extends State<AddPartyScreen>
   late TabController _tabController;
   bool userTyping = false; // Added variable to track user typing
 
+  // Calcualtion Function
+  final CalcUtil _calcUtil = CalcUtil();
   @override
   void initState() {
     super.initState();
@@ -139,7 +143,6 @@ class _AddPartyScreenState extends State<AddPartyScreen>
         }
 
         // Creating the Party
-
         final Party newParty = Party(
           id: '',
           name: PartyNameController.text,
@@ -150,9 +153,7 @@ class _AddPartyScreenState extends State<AddPartyScreen>
           EmailAddress: PartyEmailAddress.text,
           paymentType: paymentType,
           balanceType: BalanceType,
-          creationDate: Timestamp.fromDate(
-            DateTime.now(),
-          ),
+          creationDate: Timestamp.fromDate(DateTime.now()),
           transactions: [],
           GSTType: _selectedOption,
           POS: _selectedState,
@@ -161,25 +162,30 @@ class _AddPartyScreenState extends State<AddPartyScreen>
         // Adding the Party
         String partyId = await PartyController.addParty(newParty, userId);
 
+        // Adding transaction to the party
         await PartyController.addTransactionToParty(
-            partyId,
-            TransactionsMain(
-              amount: balance,
-              description: '',
-              timestamp: Timestamp.fromDate(
-                DateTime.now(),
-              ),
-              reciever: partyId,
-              sender: userId,
-              balance: 0,
-              isEditable: false,
-              recieverName: PartyNameController.text,
-              recieverId: partyId,
-              transactionType: BalanceType,
-              transactionId: '',
-              senderName: userName,
-            ),
-            userId);
+          partyId,
+          TransactionsMain(
+            amount: balance,
+            description: '',
+            timestamp: Timestamp.fromDate(DateTime.now()),
+            reciever: partyId,
+            sender: userId,
+            balance: 0,
+            isEditable: false,
+            recieverName: PartyNameController.text,
+            recieverId: partyId,
+            transactionType: BalanceType,
+            transactionId: '',
+            senderName: userName,
+          ),
+          userId,
+        );
+
+        // Recalculate total pay amount and total received amount
+        _calcUtil.calculateTotalPayAmount(userId);
+        _calcUtil.calculateTotalRecievedAmount(userId);
+
         clear();
         // print('New party added successfully');
       } else {

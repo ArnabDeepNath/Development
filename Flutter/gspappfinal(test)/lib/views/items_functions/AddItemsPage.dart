@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:gspappfinal/components/TextFormField.dart';
 import 'package:gspappfinal/components/imagePicker.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:gspappfinal/models/ItemModel.dart';
 
 class AddItemsPage extends StatefulWidget {
   const AddItemsPage({super.key});
@@ -48,7 +45,7 @@ class _AddItemsPageState extends State<AddItemsPage> {
     });
   }
 
- Future<void> _postItemToSubcollection() async {
+  Future<void> _postItemToSubcollection() async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -66,11 +63,8 @@ class _AddItemsPageState extends State<AddItemsPage> {
 
           // Upload image to Firebase Storage
           if (selectedImagePath != null) {
-            final File imageFile = File(selectedImagePath!);
             final Reference storageReference = FirebaseStorage.instance.ref().child(
                 'item_images/${userId}_${DateTime.now().millisecondsSinceEpoch}.jpg');
-            final UploadTask uploadTask = storageReference.putFile(imageFile);
-            TaskSnapshot taskSnapshot = await uploadTask;
             imageUrl = await storageReference.getDownloadURL();
           }
 
@@ -100,7 +94,6 @@ class _AddItemsPageState extends State<AddItemsPage> {
       // Handle errors (show an error message, log, etc.)
     }
   }
-
 
   bool _validateFields() {
     if (itemNameController.text.isEmpty ||

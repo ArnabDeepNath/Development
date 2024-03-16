@@ -12,13 +12,11 @@ class PartyDetailsPage extends StatefulWidget {
   final String partyId;
   final String partyName;
   final String PgstId;
-  final String userName;
 
   PartyDetailsPage({
     required this.partyId,
     required this.partyName,
     required this.PgstId,
-    required this.userName,
   });
 
   @override
@@ -30,6 +28,43 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
   String? getCurrentUserUid() {
     final User? user = FirebaseAuth.instance.currentUser;
     return user?.uid;
+  }
+
+  String userName = ''; // A variable to store the user name
+
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  void fetchFirstName() async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userId = user.uid;
+
+        // Fetch user details from Firestore
+        final userData = await usersCollection.doc(userId).get();
+        final userDataMap = userData.data() as Map<String, dynamic>?;
+
+        if (userDataMap != null && userDataMap.containsKey('first_name')) {
+          final firstName = userDataMap['first_name'] as String;
+          final email = userDataMap['email'] as String;
+
+          setState(() {
+            userName = firstName;
+          });
+        }
+      }
+    } catch (e) {
+      // Handle any errors here
+      // print('Error fetching first name: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchFirstName();
+    super.initState();
   }
 
   @override
@@ -144,6 +179,7 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                                 transactionData['transactionId'];
                             final transactionType =
                                 transactionData['transactionType'];
+                            final _isEditable = transactionData['isEditable'];
                             return transactionCard(
                               amount: amount,
                               balance: balance,
@@ -152,7 +188,7 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                               transactionId: transactionID,
                               partyId: receiver,
                               userId: sender,
-                              isEditable: false,
+                              isEditable: _isEditable,
                             );
                           },
                         );
@@ -169,6 +205,7 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AddSalePage(
+                              userName: userName,
                               partyId: widget.partyId,
                               userId: userId,
                               partyName: widget.partyName,
@@ -184,6 +221,7 @@ class _PartyDetailsPageState extends State<PartyDetailsPage> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AddSalePage(
+                              userName: userName,
                               userId: widget.partyId,
                               partyId: userId,
                               partyName: widget.partyName,

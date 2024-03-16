@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,9 +6,11 @@ import 'package:gspappfinal/constants/AppColor.dart';
 import 'package:gspappfinal/constants/AppTheme.dart';
 import 'package:gspappfinal/controllers/PartyController.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
+import 'package:gspappfinal/utils/BalanceProvider.dart';
 import 'package:gspappfinal/views/party_functions/PartyView.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:gspappfinal/utils/calcFuncs.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -26,18 +29,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    // TODO: implement
-    _calcUtil.totalPayAmountStream;
-    _calcUtil.totalReceivedAmountStream;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final String? userId = getCurrentUserUid();
-    _calcUtil.calculateTotalPayAmount(userId!);
-    _calcUtil.calculateTotalRecievedAmount(userId);
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
       body: Column(
@@ -49,102 +42,88 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: const Offset(0, 2),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Total Expense',
-                            style: AppFonts.SubtitleColor(),
-                          ),
-                          StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalReceivedAmountStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                double totalReceivedAmount =
-                                    snapshot.data?['totalAmount'];
-                                return Text(
-                                  'Rs. $totalReceivedAmount',
-                                  style: AppFonts.Subtitle2(),
-                                );
-                              }
-                            },
-                          ),
-                        ],
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        offset: const Offset(0, 2),
+                        blurRadius: 4,
+                        spreadRadius: 1,
                       ),
-                    ),
+                    ],
+                  ),
+                  child: StreamBuilder<double>(
+                    stream: Provider.of<BalanceProvider>(context)
+                        .getTotalReceiveBalanceStream(userId!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Total Income',
+                              style: AppFonts.SubtitleColor(),
+                            ),
+                            Text(
+                              'Rs. ${snapshot.data}',
+                              style: AppFonts.Subtitle2(),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: const Offset(0, 2),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Total Income',
-                            style: AppFonts.SubtitleColor(),
-                          ),
-                          StreamBuilder<Map<String, dynamic>>(
-                            stream: _calcUtil.totalPayAmountStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                double totalReceivedAmount =
-                                    snapshot.data?['totalPayAmount'] ?? 0.0;
-                                return Text(
-                                  'Rs. $totalReceivedAmount',
-                                  style: AppFonts.Subtitle2(),
-                                );
-                              }
-                            },
-                          ),
-                        ],
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        offset: const Offset(0, 2),
+                        blurRadius: 4,
+                        spreadRadius: 1,
                       ),
-                    ),
+                    ],
+                  ),
+                  child: StreamBuilder<double>(
+                    stream: Provider.of<BalanceProvider>(context)
+                        .getTotalPayBalanceStream(userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Total Expense',
+                              style: AppFonts.SubtitleColor(),
+                            ),
+                            Text(
+                              'Rs. ${snapshot.data}',
+                              style: AppFonts.Subtitle2(),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
               ],
@@ -181,6 +160,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          // Parties Display Section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
@@ -190,7 +170,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: StreamBuilder<List<Party>>(
-              stream: partyController.partiesStream(userId),
+              stream: partyController.partiesStream(userId!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -279,7 +259,6 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => PartyDetailsPage(
-                                        userName: userId,
                                         partyId: party.id,
                                         partyName: party.name,
                                         PgstId: party.GSTID,

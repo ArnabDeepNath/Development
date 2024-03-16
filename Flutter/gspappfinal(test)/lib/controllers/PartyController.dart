@@ -234,4 +234,83 @@ class MainPartyController {
       throw e;
     }
   }
+
+  Stream<double> getTotalBalanceStream(String userId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('parties')
+        .snapshots()
+        .map((snapshot) {
+      double totalBalance = 0.0;
+      for (var doc in snapshot.docs) {
+        totalBalance += doc.data()['balance'] ?? 0.0;
+      }
+      return totalBalance;
+    });
+  }
+
+  Future<void> addSale(
+      String partyId, double saleAmount, String userId, String userName) async {
+    try {
+      final userDocRef = usersCollection.doc(userId);
+      final partyDocRef = userDocRef.collection('parties').doc(partyId);
+
+      // Get the current party data
+      final partyDoc = await partyDocRef.get();
+      final partyData = partyDoc.data() as Map<String, dynamic>;
+
+      // Calculate the new balance after the sale
+      double currentBalance = partyData['balance'] ?? 0.0;
+      double newBalance = currentBalance - saleAmount;
+
+      // Update the party's balance
+      await partyDocRef.update({'balance': newBalance});
+
+      // Add a transaction for the sale
+      await MainPartyController().addTransactionToParty(
+        partyId,
+        TransactionsMain(
+          amount: saleAmount,
+          description: 'pay', // Add Dynamic Description
+          timestamp: Timestamp.now(),
+          reciever: partyData['name'], // Assuming this is the party's name
+          sender: userId,
+          balance: 0,
+          isEditable: true,
+          recieverName: partyData['name'], // Assuming this is the party's name
+          recieverId: partyId,
+          transactionType: 'pay',
+          transactionId: '', // You may want to generate a unique ID here
+          senderName: userName, // You may want to set the sender's name here
+        ),
+        userId,
+      );
+    } catch (e) {
+      print('Error adding sale: $e');
+      throw e;
+    }
+  }
+
+  Future<void> addPayment(
+      String partyId, double paymentAmount, String userId) async {
+    try {
+      final userDocRef = usersCollection.doc(userId);
+      final partyDocRef = userDocRef.collection('parties').doc(partyId);
+
+      // Get the current party data
+      final partyDoc = await partyDocRef.get();
+      final partyData = partyDoc.data() as Map<String, dynamic>;
+
+      // Calculate the new balance after adding the payment
+      double currentBalance = partyData['balance'] ?? 0.0;
+      double newBalance = currentBalance + paymentAmount;
+
+      // Update the party's balance
+      await partyDocRef.update({'balance': newBalance});
+    } catch (e) {
+      print('Error adding payment: $e');
+      throw e;
+    }
+  }
 }

@@ -12,6 +12,7 @@ class AddSalePage extends StatefulWidget {
   final String userId;
   final String partyId;
   final String partyName;
+  final String userName;
 
   final String PgstId;
   AddSalePage({
@@ -20,6 +21,7 @@ class AddSalePage extends StatefulWidget {
     required this.partyId,
     required this.partyName,
     required this.PgstId,
+    required this.userName,
   });
 
   // Party Name
@@ -288,25 +290,31 @@ class _AddSalePageState extends State<AddSalePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      PartyController.addTransactionToParty(
-                          widget.partyId,
-                          TransactionsMain(
-                            amount: 0,
-                            description: '',
-                            timestamp: Timestamp.fromDate(
-                              DateTime.now(),
-                            ),
-                            reciever: widget.partyName,
-                            sender: widget.userId,
-                            balance: 0,
-                            isEditable: false,
-                            recieverName: widget.partyName,
-                            recieverId: widget.partyId,
-                            transactionType: '',
-                            transactionId: '',
-                            senderName: '',
-                          ),
-                          widget.userId);
+                      PartyController.addSale(
+                        widget.partyId,
+                        double.parse(TotalAmount.text),
+                        widget.userId,
+                        widget.userName,
+                      );
+                      // PartyController.addTransactionToParty(
+                      //     widget.partyId,
+                      //     TransactionsMain(
+                      //       amount: 0,
+                      //       description: '',
+                      //       timestamp: Timestamp.fromDate(
+                      //         DateTime.now(),
+                      //       ),
+                      //       reciever: widget.partyName,
+                      //       sender: widget.userId,
+                      //       balance: 0,
+                      //       isEditable: false,
+                      //       recieverName: widget.partyName,
+                      //       recieverId: widget.partyId,
+                      //       transactionType: '',
+                      //       transactionId: '',
+                      //       senderName: '',
+                      //     ),
+                      //     widget.userId);
                     },
                     child: const Text('Save'),
                   ),
