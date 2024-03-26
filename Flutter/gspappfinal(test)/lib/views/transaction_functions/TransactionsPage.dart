@@ -38,23 +38,35 @@ class _UserTransactionsPageState extends State<UserTransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
-      body: ListView.builder(
-        itemCount: _transactions.length,
-        itemBuilder: (context, index) {
-          final transaction = _transactions[index];
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: transactionCard(
-              amount: transaction.amount,
-              balance: transaction.balance,
-              name: transaction.recieverName,
-              transactionType: transaction.transactionType,
-              partyId: transaction.recieverId,
-              userId: transaction.sender!,
-              transactionId: transaction.transactionId,
-              isEditable: transaction.isEditable,
-            ),
-          );
+      body: StreamBuilder<List<TransactionsMain>>(
+        stream: MainPartyController().getUserTransactions(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<TransactionsMain> transactions = snapshot.data ?? [];
+            return ListView.builder(
+              itemCount: transactions.length,
+              itemBuilder: (context, index) {
+                final transaction = transactions[index];
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: transactionCard(
+                    amount: transaction.amount,
+                    balance: transaction.balance,
+                    name: transaction.recieverName,
+                    transactionType: transaction.transactionType,
+                    partyId: transaction.recieverId,
+                    userId: transaction.sender!,
+                    transactionId: transaction.transactionId,
+                    isEditable: transaction.isEditable,
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
     );

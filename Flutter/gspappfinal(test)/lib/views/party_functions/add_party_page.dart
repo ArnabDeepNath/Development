@@ -160,7 +160,8 @@ class _AddPartyScreenState extends State<AddPartyScreen>
         );
 
         // Adding the Party
-        String partyId = await PartyController.addParty(newParty, userId);
+        String partyId =
+            await PartyController.addParty(context, newParty, userId);
 
         // Adding transaction to the party
         await PartyController.addTransactionToParty(

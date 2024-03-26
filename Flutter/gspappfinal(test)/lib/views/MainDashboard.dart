@@ -84,7 +84,7 @@ class _MainDashboardState extends State<MainDashboard> {
     fetchFirstName();
     setState(() {
       _pages = [
-        HomePage(),
+        const HomePage(),
         _buildItemsPage(),
         UserTransactionsPage(),
       ];

@@ -45,13 +45,33 @@ class BalanceProvider extends ChangeNotifier {
         .collection('users')
         .doc(userId)
         .collection('parties')
-        .where('balanceType', isEqualTo: 'recieve')
         .snapshots()
-        .map((snapshot) {
+        .asyncMap((partySnapshot) async {
       double totalBalance = 0.0;
-      for (var doc in snapshot.docs) {
-        totalBalance += doc.data()['balance'] ?? 0.0;
+
+      for (var partyDoc in partySnapshot.docs) {
+        var partyId = partyDoc.id;
+
+        var partyTransactions = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('parties')
+            .doc(partyId)
+            .collection('transactions')
+            .where('transactionType', isEqualTo: 'recieve')
+            .get();
+
+        print('Party Transactions: ${partyTransactions.docs.length}');
+
+        for (var doc in partyTransactions.docs) {
+          var transactionData = doc.data();
+          print('Transaction Data: $transactionData');
+          var transactionAmount = transactionData['amount'] ?? 0.0;
+          totalBalance += transactionAmount;
+        }
       }
+
+      print('Total Balance: $totalBalance');
       return totalBalance;
     });
   }

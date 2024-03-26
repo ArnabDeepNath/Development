@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:gspappfinal/models/TransactionsModel.dart';
 import 'package:gspappfinal/models/PartyModel.dart';
+import 'package:gspappfinal/utils/BalanceProvider.dart';
+import 'package:provider/provider.dart';
 
 class MainPartyController {
   final CollectionReference partiesCollection =
@@ -37,7 +40,8 @@ class MainPartyController {
     });
   }
 
-  Future<String> addParty(Party party, String userId) async {
+  Future<String> addParty(
+      BuildContext context, Party party, String userId) async {
     try {
       // Reference the user's document
       final userDocRef = usersCollection.doc(userId);
@@ -58,6 +62,7 @@ class MainPartyController {
       });
 
       // Return the partyId
+      Provider.of<BalanceProvider>(context, listen: false).notifyListeners();
       return docRef.id;
     } catch (e) {
       print('Error adding party: $e');
