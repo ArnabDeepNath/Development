@@ -268,20 +268,24 @@ class MainPartyController {
       // Calculate the new balance after the sale
       double currentBalance = partyData['balance'] ?? 0.0;
       double newBalance = currentBalance - saleAmount;
+      String newBalanceType = newBalance >= 0 ? 'pay' : 'receive';
 
-      // Update the party's balance
-      await partyDocRef.update({'balance': newBalance});
+      // Update the party's balance and balance type
+      await partyDocRef.update({
+        'balance': newBalance.abs(), // Ensure balance is positive
+        'balanceType': newBalanceType,
+      });
 
       // Add a transaction for the sale
       await MainPartyController().addTransactionToParty(
         partyId,
         TransactionsMain(
           amount: saleAmount,
-          description: 'pay', // Add Dynamic Description
+          description: 'Sale', // Adjust the description as needed
           timestamp: Timestamp.now(),
           reciever: partyData['name'], // Assuming this is the party's name
           sender: userId,
-          balance: 0,
+          balance: newBalance.abs(), // Ensure balance is positive
           isEditable: true,
           recieverName: partyData['name'], // Assuming this is the party's name
           recieverId: partyId,

@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gspappfinal/constants/AppColor.dart';
+import 'package:gspappfinal/utils/excelUtil.dart';
+import 'package:gspappfinal/utils/pdfUtil.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
+import 'package:share/share.dart';
 
 class ReportFunction extends StatefulWidget {
   const ReportFunction({super.key});
@@ -63,8 +69,51 @@ class _ReportFunctionState extends State<ReportFunction> {
             Column(
               children: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Generate report logic here
+
+                    // String filePath = await generatePDF_GST(
+                    //     'quotationId',
+                    //     Timestamp.now(),
+                    //     'name',
+                    //     'address',
+                    //     'phoneNumber',
+                    //     'email',
+                    //     'panId',
+                    //     'gstId',
+                    //     'optyId',
+                    //     true,
+                    //     'carLob',
+                    //     'carModel',
+                    //     0.0,
+                    //     1,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     0,
+                    //     [],
+                    //     'username',
+                    //     'userId',
+                    //     PdfPageFormat(
+                    //         PdfPageFormat.a4.width, PdfPageFormat.a4.height));
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => PDFViewerScreen(
+                    //       filePath: filePath,
+                    //       share: true,
+                    //     ),
+                    //   ),
+                    // );
+                    createExcelFile();
                   },
                   child: Text('Generate Report'),
                 ),
@@ -89,6 +138,36 @@ class _ReportFunctionState extends State<ReportFunction> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class PDFViewerScreen extends StatelessWidget {
+  final String filePath;
+  final bool share;
+
+  const PDFViewerScreen({
+    Key? key,
+    required this.filePath,
+    this.share = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Invoice"),
+        actions: [
+          if (share)
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () async {
+                await Share.share(filePath);
+              },
+            ),
+        ],
+      ),
+      body: PdfView(path: filePath),
     );
   }
 }
