@@ -1,12 +1,12 @@
 import './App.css';
-import AboutUs from './components/AboutUs';
-import HeroSection from './components/HeroSection/';
+import AboutUs from './sections/AboutUs';
+import HeroSection from './sections/HeroSection/';
 import Navbar from './components/Navbar';
-import PortfolioSection from './components/PortfolioSection';
+import PortfolioSection from './sections/PortfolioSection';
 import ScrollingHeader from './components/ScrollingHeader';
 import Teams from './sections/Teams';
 
-import Footer from './components/Footer';
+import Footer from './sections/Footer';
 
 export default function App() {
   return (

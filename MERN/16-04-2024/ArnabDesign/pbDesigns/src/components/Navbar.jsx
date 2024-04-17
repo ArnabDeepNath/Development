@@ -1,21 +1,23 @@
 import React from 'react';
-
+import './Navbar.css';
 const Navbar = () => {
   return (
-    <div className="w-full bg-gray-100">
-      <div className="flex space-x-4 justify-end py-8 mr-8 font-bold text-lg text-zinc-800">
-        <a className="hover:text-white" href="">
-          Home
-        </a>
-        <a className="hover:text-white" href="">
-          Portfolio
-        </a>
-        <a className="hover:text-white" href="">
-          Team
-        </a>
-        <a className="hover:text-white" href="">
-          About Us
-        </a>
+    <div className="w-full px-4 py-8 bg-gray-50 flex justify-end ">
+      <div className="links flex gap-10 items-center">
+        {['Service', 'Team', 'Portfolio', 'About us', 'Connect Now'].map(
+          (item, index) => (
+            <a
+              key={index}
+              className={`capitalize text-lg font-light font-[lato] cursor-pointer  ${
+                index === 4 &&
+                'ml-32 border-solid border-2 border-zinc-400 rounded-3xl px-8 py-2'
+              }`}
+              style={{ position: 'relative' }}>
+              <h1>{item}</h1>
+              <span className=" bg-zinc-400" />
+            </a>
+          ),
+        )}
       </div>
     </div>
   );

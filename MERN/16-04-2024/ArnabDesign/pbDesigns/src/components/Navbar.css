@@ -1,0 +1,4 @@
+.links a:hover span {
+  transform: scaleX(0.8);
+  opacity: 100;
+}
