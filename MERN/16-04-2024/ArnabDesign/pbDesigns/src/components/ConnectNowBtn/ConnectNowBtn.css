@@ -1,0 +1,13 @@
+.explore {
+  transition: all 0.3s 'ease-in';
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease-in-out;
+  filter: brightness(0.8);
+}
+
+.explore:hover .arrow-icon {
+  transform: rotate(0deg); /* Reset rotation on hover */
+  filter: brightness(0) invert(1);
+}

@@ -1,0 +1,23 @@
+.links a:hover span {
+  transform: scaleX(0.8);
+  opacity: 100;
+}
+
+.navbar {
+  transition: top 0.3s;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Set the background color with transparency */
+  backdrop-filter: blur(10px); /* Apply a blur effect */
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  opacity: 0.5;
+}
