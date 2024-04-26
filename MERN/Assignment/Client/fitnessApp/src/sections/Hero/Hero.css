@@ -1,0 +1,5 @@
+.heroHeader {
+  background: -webkit-linear-gradient(#f5eca2, #45546c, #212120);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
