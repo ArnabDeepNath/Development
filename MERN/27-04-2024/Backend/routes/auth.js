@@ -6,6 +6,7 @@ router.post('/add-user', async (req, res) => {
   const user = new userModel(req.body);
   try {
     await user.save();
+    //   Always call your function
     res.status(201).json({
       status: 'Success',
       data: {
@@ -23,6 +24,7 @@ router.post('/add-user', async (req, res) => {
 
 router.get('/get-users', async (req, res) => {
   const allUsers = await userModel.find({});
+  // Remember the notations
 
   try {
     res.status(200).json({
@@ -37,4 +39,5 @@ router.get('/get-users', async (req, res) => {
   }
 });
 
+// Always call your router
 module.exports = router;
