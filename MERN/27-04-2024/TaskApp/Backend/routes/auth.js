@@ -157,4 +157,6 @@ router.delete('/deleteTask/:id', async (req, res) => {
   }
 });
 
+// We need to implement login facility and desing the frontend
+
 module.exports = router;
