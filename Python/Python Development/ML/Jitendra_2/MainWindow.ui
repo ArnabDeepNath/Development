@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>29</x>
+      <y>109</y>
+      <width>591</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout"/>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>480</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Generate Results</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>30</y>
+      <width>121</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Upload Dataset</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>30</y>
+      <width>121</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Train Model</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMain">
+    <property name="title">
+     <string>Main</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuDataset">
+    <property name="title">
+     <string>Dataset</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuModel">
+    <property name="title">
+     <string>Model</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuDataset"/>
+   <addaction name="menuModel"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

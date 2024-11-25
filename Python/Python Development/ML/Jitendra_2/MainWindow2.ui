@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Machine Learning App</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>741</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="ResultsWindow">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Coverage Code :</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="coveragePredictionLineEdit"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Accident Source: </string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="accidentPredictionLineEdit"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="predictButton">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>50</y>
+      <width>321</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Generate Results</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="uploadCsvButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>410</y>
+      <width>361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Upload Dataset And Train</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="loadModelButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>350</y>
+      <width>361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Upload Trained Model</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveResultsButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>470</y>
+      <width>361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save Results</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>191</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Claim Description</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="manualInputText">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>331</width>
+      <height>51</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="loaded_model_f1_score">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>440</y>
+      <width>321</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="loaded_model_accuracy">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>370</y>
+      <width>311</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>330</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Loaded Model Summary</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>200</y>
+      <width>741</width>
+      <height>112</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Results</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableWidget" name="predictionTable"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMain">
+    <property name="title">
+     <string>Main</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuDataset">
+    <property name="title">
+     <string>Dataset</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuModel">
+    <property name="title">
+     <string>Model</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuDataset"/>
+   <addaction name="menuModel"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
